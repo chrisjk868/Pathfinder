@@ -1,0 +1,15 @@
+.cell {
+    color: purple;
+    border: solid;
+    height: 50px;
+    width: 50px;
+    
+}
+
+/* .cell p {
+    color: green;
+    border: solid;
+    margin: 10px;
+    max-height: 100%;
+    max-width: 100%;
+} */
