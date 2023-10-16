@@ -3,14 +3,15 @@ import './styles/Cell.css';
 import { Row, Col } from 'react-bootstrap';
 
 function Cell(props) {
-    // const {width, height} = props.data
+    
+    let getCoords = () => {
+        const res = { x: props.col, y: props.row }
+        console.log(res);
+    }
+
     return (
-        <div className='cell'>
-            <p>
-                {/* Window dimensions are L: {width}, W: {height} */}
-            </p>
-        </div>
-    )
+        <div className='cell' onClick={() => getCoords()}></div>
+    )   
 }
 
-export default Cell;
+export default Cell;    

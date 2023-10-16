@@ -1,5 +1,13 @@
 .graph {
-    color: black;
-    border: solid;
+    /* border: solid; */
     margin: 10px;
+}
+
+#row {
+    /* color: green; */
+    /* border: solid; */
+    height: 50px;
+    padding: 0;
+    margin: 0;
+    text-align: center;
 }

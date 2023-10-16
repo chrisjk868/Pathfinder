@@ -1,15 +1,13 @@
 .cell {
-    color: purple;
+    color: grey;
     border: solid;
-    height: 50px;
+    height: 100%;
     width: 50px;
-    
+    margin: 0;
+    padding: 0;
+    display: inline-block;
 }
 
-/* .cell p {
-    color: green;
-    border: solid;
-    margin: 10px;
-    max-height: 100%;
-    max-width: 100%;
-} */
+.cell:hover {
+    background-color: rgb(182, 182, 182);
+}

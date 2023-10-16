@@ -11,22 +11,34 @@ function getWindowDimesion() {
 function getRowsCols() {
     const { width, height } = getWindowDimesion();
     let [ ROWS, COLS ] = [ width / 50, height / 50 ];
+    // console.log(width, height);
     return [ Math.floor(ROWS), Math.floor(COLS) ];
 }
 
 function Graph() {
+
     const [ ROWS, COLS ] = getRowsCols();
-    const graphRows = [];
+    const graph = [];
     for (let row = 0; row <= ROWS; row++) {
-        graphRows.push([]);
+        graph.push([]);
         for (let col = 0; col <= COLS; col++) {
-            graphRows[row].push(<Cell/>)
+            graph[row].push([]);
         }
     }
     // console.log(ROWS, COLS);
     return (
         <div className='graph'>
-            {graphRows}
+            {graph.map((row, rowIdx) => {
+                return (
+                    <div id='row' key={rowIdx}>
+                        {
+                            row.map((col, colIdx) => {  
+                                return (<Cell row={rowIdx} col={colIdx} key={[colIdx, rowIdx]}/>);
+                            })
+                        }
+                    </div>
+                );
+            })}
         </div>
     )
 }
