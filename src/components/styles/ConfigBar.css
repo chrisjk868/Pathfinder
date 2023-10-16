@@ -1,4 +1,9 @@
 .configBar {
+    justify-content: center;
     height: 8vh;
     background-color: #18ba8f;
-}   
+}
+
+Button {
+    margin: 1rem;
+}

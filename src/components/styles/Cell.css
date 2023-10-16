@@ -1,13 +1,3 @@
-.cell {
-    color: grey;
-    border: solid;
-    height: 100%;
-    width: 50px;
-    margin: 0;
-    padding: 0;
-    display: inline-block;
-}
-
 .cell:hover {
     background-color: rgb(182, 182, 182);
 }

@@ -1,12 +1,14 @@
 .graph {
     /* border: solid; */
-    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-#row {
+[id^="row"] {
     /* color: green; */
     /* border: solid; */
-    height: 50px;
+    height: 30px;
     padding: 0;
     margin: 0;
     text-align: center;
