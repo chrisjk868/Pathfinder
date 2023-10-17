@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './styles/Graph.css';
 import Cell from './Cell';
+import BFS from '../utils/BFS';
 import { Container } from 'react-bootstrap';
 
 
@@ -21,10 +22,10 @@ function computeNodes(ROWS, COLS) {
             .fill()
             .map((_row, rowIdx) =>
 								Array( COLS )
-								.fill()
-								.map((_col, colIdx) => ({ x: colIdx, y: rowIdx, isStart: false, isEnd: false, isWall: false, backgroundColor: '' }))
+									.fill()
+									.map((_col, colIdx) => ({ x: colIdx, y: rowIdx, isStart: false, isEnd: false, isWall: false, backgroundColor: '' }))
             )
-    )
+    );
 }
 
 
@@ -36,6 +37,8 @@ function Graph(props) {
     const [graph, setGraph] = useState([]); 
     const [addedStart, setAddedStart] = useState(false);
     const [addedEnd, setAddedEnd] = useState(false);
+	const [start, setStart] = useState(null);
+	const [end, setEnd] = useState(null);
 
     // Hook that rerenders the board if the size of window changes
     useEffect(() => {
@@ -59,10 +62,12 @@ function Graph(props) {
 			newNodes[y][x]['backgroundColor'] = 'green';
 			newNodes[y][x]['isStart'] = true;
 			setAddedStart(true);
+			setStart(newNodes[y][x]);
 		} else if (!addedEnd) {
 			newNodes[y][x]['backgroundColor'] = 'red';
 			newNodes[y][x]['isEnd'] = true;
 			setAddedEnd(true);
+			setEnd(newNodes[y][x]);
 		} else if (!newNodes[y][x]['isStart'] &&
 				   !newNodes[y][x]['isEnd']) {
 			newNodes[y][x]['backgroundColor'] = '#00008B';
