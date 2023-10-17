@@ -22,7 +22,7 @@ function computeNodes(ROWS, COLS) {
             .map((_row, rowIdx) =>
 								Array( COLS )
 								.fill()
-								.map((_col, colIdx) => ({ x: colIdx, y: rowIdx, isStart: false, isEnd: false, backgroundColor: '' }))
+								.map((_col, colIdx) => ({ x: colIdx, y: rowIdx, isStart: false, isEnd: false, isWall: false, backgroundColor: '' }))
             )
     )
 }
@@ -35,18 +35,14 @@ function Graph(props) {
     const [nodes, setNodes] = useState([]);
     const [graph, setGraph] = useState([]); 
     const [addedStart, setAddedStart] = useState(false);
-    const [addedEnd, setAddedend] = useState(false);
-
-    // Hook that determines if start is added
-    useEffect(() => {
-        
-    }, [addedStart ]);
-
+    const [addedEnd, setAddedEnd] = useState(false);
 
     // Hook that rerenders the board if the size of window changes
     useEffect(() => {
         setNodes(computeNodes(ROWS, COLS));
         setGraph(computeBoard(ROWS, COLS));
+		setAddedStart(false);
+		setAddedEnd(false);
         // console.log('Graph:', props.height, props.width);
         // console.log('Board Dimensions:', ROWS, COLS)
         // console.log(nodes);
@@ -55,18 +51,27 @@ function Graph(props) {
 
     // Recieving data from child cell
     const handleCick = (coords) => {
-        const {x: x, y: y} = coords;
+		let newNodes = [...nodes];
+		const {x: x, y: y} = coords;
         console.log('Clicked coordinates from graph \n', coords);
 
-        // Color the clicked cell here and save it
-        console.log('Clicked cell from graph:\n', graphRef.current.childNodes[y].childNodes[x]);
-        let cell = graphRef.current.childNodes[y].childNodes[x];
-        cell.backgroundColor = 'green';
+		if (!addedStart) {
+			newNodes[y][x]['backgroundColor'] = 'green';
+			newNodes[y][x]['isStart'] = true;
+			setAddedStart(true);
+		} else if (!addedEnd) {
+			newNodes[y][x]['backgroundColor'] = 'red';
+			newNodes[y][x]['isEnd'] = true;
+			setAddedEnd(true);
+		} else if (!newNodes[y][x]['isStart'] &&
+				   !newNodes[y][x]['isEnd']) {
+			newNodes[y][x]['backgroundColor'] = '#00008B';
+			newNodes[y][x]['isEnd'] = true;
+		}
 
         // Change the state of the related cell in nodes
-        let newNodes = [...nodes];
-        console.log(newNodes);
-        newNodes[y][x]['backgroundColor'] = 'green';
+        // console.log(newNodes);
+        // newNodes[y][x]['backgroundColor'] = 'green';
         setNodes(newNodes);
     }
     
