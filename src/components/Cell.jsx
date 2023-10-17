@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './styles/Cell.css';
 import { Row, Col } from 'react-bootstrap';
 
@@ -11,13 +11,19 @@ function Cell(props) {
         width: '30px',
         margin: '0',
         padding: '0',
-        display: 'inline-block'
+        display: 'inline-block',
+        borderWidth: 'thin',
+        backgroundColor: props.backgroundColor
     };
 
-    const clickedStyle = {
-        ...defaultStyles,
-        backgroundColor: 'red'
-    }
+    const[style, setStyle] = useState(defaultStyles);
+
+    // Hook that rerenders cell when background color is changed
+    useEffect(() => {
+        setStyle(defaultStyles);
+    }, [props.backgroundColor]);
+
+    // console.log(`color for cell ${props.row}, ${props.col} is ${props.backgroundColor}`);
 
     let getCoords = () => {
         const res = { x: props.col, y: props.row }
@@ -25,29 +31,12 @@ function Cell(props) {
     }
 
     return (
-        <div className='cell' id={`${props.id}`} style={defaultStyles} onClick={() => {
+        <div className='cell' id={`${props.id}`} style={style} onClick={() => {
                 props.handleClick(getCoords()); // Sending data back to graph when a cell is clicked
             }
         }>
         </div>
     )
 }
-
-// const Cell = React.forwardRef((props, ref) => {
-
-//     let getCoords = () => {
-//         const res = { x: props.col, y: props.row }
-//         return res;
-//     }
-
-//     return (
-//         <div className='cell' id={`${props.id}`} ref={ref} onClick={() => {
-//                 props.handleClick(getCoords()); // Sending data back to graph when a cell is clicked
-//             }
-//         }>
-//         </div>
-//     )
-
-// })
 
 export default Cell;    
