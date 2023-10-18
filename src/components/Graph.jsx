@@ -94,7 +94,7 @@ function Graph(props) {
 		} else if (!newNodes[y][x]['isStart'] &&
 				   !newNodes[y][x]['isEnd']) {
 			newNodes[y][x]['backgroundColor'] = '#00008B';
-			newNodes[y][x]['isEnd'] = true;
+			newNodes[y][x]['isWall'] = true;
 		}
 
         // Change the state of the related cell in nodes

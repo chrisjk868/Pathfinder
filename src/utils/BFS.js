@@ -18,10 +18,10 @@ function BFS(grid, start, end) {
     // Initalize frontier for BFS
     frontier.enqueue(start);
     adjacency[[start.y, start.x]] = null;
+    visited.add(JSON.stringify(start))
     while (!frontier.isEmpty()) {
-        // Visit the current node
+        // Process the current node
         let currNode = frontier.dequeue(); // currNode: Parent
-        visited.add(JSON.stringify(currNode));
         // When we visit the node we want to also maninpulate the DOM
         // let nodeVisited = document.getElementById(`${currNode.y}-${currNode.x}`);
         console.log('\n==================================================================');
@@ -30,15 +30,15 @@ function BFS(grid, start, end) {
         console.log('BFS.js: Frontier:', frontier);
         // console.log(frontier.isEmpty());
 
-        if (JSON.stringify(currNode) === JSON.stringify(end)) {
+        if (currNode.isEnd) {
             console.log('BFS.js: End node reached:', currNode);
-            reachable = !reachable;
+            reachable = true;
             break;
         }
-        // Check the next candidates to add to queue
+        // Check the next candidates to visit
         neiEnums.forEach((deltas, _index) => {
             const {y: deltaY, x: deltaX} = deltas;
-            const newCoords = {y: currNode['y'] + deltaY, x: currNode['x'] + deltaX}; // newNode: Child
+            const newCoords = {y: currNode.y + deltaY, x: currNode.x + deltaX}; // newNode: Child
             // DEBUG
             // console.log(newCoords);
             // console.log('BFS.js: new node:', newNode);
@@ -47,8 +47,9 @@ function BFS(grid, start, end) {
             // console.log(!visited.has(JSON.stringify(newNode)));
             if (0 <= newCoords.y && newCoords.y < ROWS && 0 <= newCoords.x && newCoords.x < COLS) {
                 const newNode = grid[newCoords.y][newCoords.x];
-                if (!visited.has(JSON.stringify(newNode))) {
-                    frontier.enqueue(grid[newNode.y][newNode.x]);
+                if (!visited.has(JSON.stringify(newNode)) && !newNode.isWall) {
+                    frontier.enqueue(newNode);
+                    visited.add(JSON.stringify(newNode));
                     console.log('BFS.js: Added node', newCoords);
                     adjacency[[newNode.y, newNode.x]] = [currNode.y, currNode.x]; // A Child can't have multiple parents
                 }
