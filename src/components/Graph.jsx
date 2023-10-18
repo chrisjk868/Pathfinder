@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import './styles/Graph.css';
 import Cell from './Cell';
-import BFS from '../utils/BFS';
+import BFS from '../utils/BFS.js';
 import { Container } from 'react-bootstrap';
 
 
@@ -23,7 +23,15 @@ function computeNodes(ROWS, COLS) {
             .map((_row, rowIdx) =>
 								Array( COLS )
 									.fill()
-									.map((_col, colIdx) => ({ x: colIdx, y: rowIdx, isStart: false, isEnd: false, isWall: false, backgroundColor: '' }))
+									.map((_col, colIdx) => ({
+										x: colIdx,
+										y: rowIdx,
+										isStart: false,
+										isEnd: false,
+										isWall: false,
+										backgroundColor: ''
+									 })
+									)
             )
     );
 }
@@ -39,6 +47,7 @@ function Graph(props) {
     const [addedEnd, setAddedEnd] = useState(false);
 	const [start, setStart] = useState(null);
 	const [end, setEnd] = useState(null);
+	// const [running, setRunning] = useState(false);
 
     // Hook that rerenders the board if the size of window changes
     useEffect(() => {
@@ -51,6 +60,20 @@ function Graph(props) {
         // console.log(nodes);
         // console.log(graph);
     }, [props.width, props.height]);
+
+	// Hook that runs when Run BFS button is clicked
+	// Run BFS with pre-existing graph data
+	useEffect(() => {
+		console.log('Graph.js, props.run:', props.run);
+		if (props.run && addedStart && addedEnd) {
+			// Disable all event listeners here for click in Cells
+			console.log('Graph.js: Running BFS...');
+			const path = BFS(nodes, start, end);
+			console.log('Graph.js: Returned path is:', path);
+		}
+	}, [props.run]);
+
+	console.log('Graph.js: On render and state/props change:', nodes);
 
     // Recieving data from child cell
     const handleCick = (coords) => {

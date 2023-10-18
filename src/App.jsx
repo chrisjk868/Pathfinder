@@ -8,6 +8,7 @@ function App() {
 
 	const [width, setWidth] = useState(window.innerWidth);
 	const [height, setHeight] = useState(window.innerHeight);
+	const [run, setRun] = useState(false);
 
 	useEffect(() => {
 		const resizeObserver = new ResizeObserver((event) => {
@@ -20,12 +21,17 @@ function App() {
 		// console.log('Graph Container', width, height);
 	}, [width, height]);
 
+	const runBfs = () => {
+		console.log('App.js: runBfs()');
+		setRun(true);
+		console.log('App.js: Changed props.run = true');
+	}
 
 	return (
 		<div className="App">
-			<ConfigBar/>
+			<ConfigBar runBfs={runBfs} />
 			<div id='graph-parent'>
-				<Graph width={width} height={height}/>
+				<Graph width={width} height={height} run={run}/>
 			</div>
 		</div>
 	);
