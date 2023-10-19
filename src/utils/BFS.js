@@ -1,7 +1,11 @@
 import Queue from "./Queue.js";
 // import _ from "lodash";
 
-function BFS(grid, start, end) {
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+ }
+
+async function BFS(grid, start, end) {
 
     console.log('BFS.js: Start is:', start);
     console.log('BFS.js: End is:', end);
@@ -10,8 +14,9 @@ function BFS(grid, start, end) {
         return;
     }
     const [ROWS, COLS] = [grid.length, grid[0].length];
-    const neiEnums = [{y: 1, x: 0}, {y: -1, x: 0}, {y: 0, x: -1}, {y: 0, x: 1}]; // Up Down Left Right
-    let adjacency = {}; // {Child : Parent}
+    // Up, Down, Left, Right
+    const neiEnums = [{y: 1, x: 0}, {y: -1, x: 0}, {y: 0, x: -1}, {y: 0, x: 1}];
+    let adjacency = {};
     let frontier = new Queue();
     let visited = new Set();
     let reachable = false;
@@ -22,17 +27,14 @@ function BFS(grid, start, end) {
     while (!frontier.isEmpty()) {
         // Process the current node
         let currNode = frontier.dequeue(); // currNode: Parent
-        // When we visit the node we want to also maninpulate the DOM
-        // let nodeVisited = document.getElementById(`${currNode.y}-${currNode.x}`);
-        console.log('\n==================================================================');
-        console.log('BFS.js: Current node:', currNode);
-        console.log('BFS.js: Visited nodes:', visited);
-        console.log('BFS.js: Frontier:', frontier);
+        // console.log('\n==================================================================');
+        // console.log('BFS.js: Current node:', currNode);
+        // console.log('BFS.js: Visited nodes:', visited);
+        // console.log('BFS.js: Frontier:', frontier);
         // console.log(frontier.isEmpty());
 
-        if (currNode.isEnd) {
-            console.log('BFS.js: End node reached:', currNode);
-            reachable = true;
+        if (reachable) {
+            // console.log('BFS.js: End node reached:', currNode);
             break;
         }
         // Check the next candidates to visit
@@ -50,33 +52,42 @@ function BFS(grid, start, end) {
                 if (!visited.has(JSON.stringify(newNode)) && !newNode.isWall) {
                     frontier.enqueue(newNode);
                     visited.add(JSON.stringify(newNode));
-                    console.log('BFS.js: Added node', newCoords);
+                    // console.log('BFS.js: Added node', newCoords);
                     adjacency[[newNode.y, newNode.x]] = [currNode.y, currNode.x]; // A Child can't have multiple parents
+                    if (newNode.isEnd) {
+                        // console.log('BFS.js: End node reached:', currNode);
+                        reachable = true;
+                        // break;
+                    } else {
+                        let cell = document.getElementById(`${newNode.y}-${newNode.x}`);
+                        cell.style.backgroundColor = 'cyan';
+                    }
                 }
             }
         });
-        console.log('BFS.js: Child(y, x) : Parent(y, x) | From(Parent) To(Child)', adjacency);
-        console.log('==================================================================\n');
-        // Delay for animations
-        // let timerId = setTimeout(() => {
-        //     console.log('delaying')
-        // }, 1000);
+        // console.log('BFS.js: Child(y, x) : Parent(y, x) | From(Parent) To(Child)', adjacency);
+        // console.log('==================================================================\n');
+        await sleep(5);
     }
     if (reachable) {
-        const reconstructPath = (end, adjacency) => {
+        const reconstructPath = async (end, adjacency) => {
             console.log('BFS.js: Reconstructing path...');
             console.log('BFS.js: Current adjacency:', adjacency);
             let path = [];
             let curr = end;
             while (curr !== null) {
+                if (!grid[curr[0]][curr[1]].isEnd && !grid[curr[0]][curr[1]].isStart) {
+                    let cell = document.getElementById(`${curr[0]}-${curr[1]}`);
+                    cell.style.backgroundColor = 'yellow';
+                }
                 path.push(curr);
                 curr = adjacency[curr] // Visit Parent from Child
+                await sleep(50);
             }
             return path; // From end to start
         };
-
-        const path = reconstructPath([end.y, end.x], adjacency);
-        console.log(path)
+        const path = await reconstructPath([end.y, end.x], adjacency);
+        console.log(path);
         return path.reverse(); // From start to end
     }
     console.log('BFS.js: Path isn\'t reachable');

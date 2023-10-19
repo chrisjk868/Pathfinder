@@ -6,9 +6,9 @@ function ConfigBar({ runBfs }) {
 
     return (
         <div className="configBar">
-            {/* <Button className="btn" variant="light"> Add Start </Button>
-            <Button className="btn" variant="light"> Add End </Button> */}
+            <Button className="btn" variant="light"> Create Maze </Button>
             <Button variant="light" onClick={() => {runBfs();}} > Run BFS </Button>
+            <Button className="btn" variant="light"> Clear Board </Button>
         </div>
     )
 
