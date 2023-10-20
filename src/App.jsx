@@ -9,6 +9,7 @@ function App() {
 	const [width, setWidth] = useState(window.innerWidth);
 	const [height, setHeight] = useState(window.innerHeight);
 	const [run, setRun] = useState(false);
+	const [reset, setReset] = useState(false);
 
 	useEffect(() => {
 		const resizeObserver = new ResizeObserver((event) => {
@@ -23,15 +24,19 @@ function App() {
 
 	const runBfs = () => {
 		console.log('App.js: runBfs()');
-		setRun(true);
-		console.log('App.js: Changed props.run = true');
+		setRun(!run);
+		console.log('App.js: Changed props.run');
+	}
+
+	const clearBoard = () => {
+		setReset(!reset);
 	}
 
 	return (
 		<div className="App">
-			<ConfigBar runBfs={runBfs} />
+			<ConfigBar runBfs={runBfs} clearBoard={clearBoard}/>
 			<div id='graph-parent'>
-				<Graph width={width} height={height} run={run}/>
+				<Graph width={width} height={height} run={run} reset={reset}/>
 			</div>
 		</div>
 	);

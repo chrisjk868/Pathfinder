@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import './styles/Cell.css';
 import { Row, Col } from 'react-bootstrap';
 
@@ -17,11 +17,17 @@ function Cell(props) {
     };
 
     const[style, setStyle] = useState(defaultStyles);
+    // const[reset, setReset] = useState(false);
 
     // Hook that rerenders cell when background color is changed
     useEffect(() => {
         setStyle(defaultStyles);
     }, [props.backgroundColor]);
+
+    // Hook that rerenders cell when clear board is pressed:
+    // useEffect(() => {
+    //     setReset(!reset);
+    // }, [props.reset])
 
     // console.log(`color for cell ${props.row}, ${props.col} is ${props.backgroundColor}`);
 
@@ -39,4 +45,4 @@ function Cell(props) {
     )
 }
 
-export default Cell;    
+export default Cell;
