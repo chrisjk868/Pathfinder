@@ -10,6 +10,7 @@ function App() {
 	const [height, setHeight] = useState(window.innerHeight);
 	const [run, setRun] = useState(false);
 	const [reset, setReset] = useState(false);
+	const [generate, setGenerate] = useState(false);
 
 	useEffect(() => {
 		const resizeObserver = new ResizeObserver((event) => {
@@ -32,11 +33,15 @@ function App() {
 		setReset(!reset);
 	}
 
+	const generateMaze = () => {
+		setGenerate(!generate);
+	}
+
 	return (
 		<div className="App">
-			<ConfigBar runBfs={runBfs} clearBoard={clearBoard}/>
+			<ConfigBar runBfs={runBfs} clearBoard={clearBoard} generateMaze={generateMaze}/>
 			<div id='graph-parent'>
-				<Graph width={width} height={height} run={run} reset={reset}/>
+				<Graph width={width} height={height} run={run} reset={reset} generate={generate}/>
 			</div>
 		</div>
 	);

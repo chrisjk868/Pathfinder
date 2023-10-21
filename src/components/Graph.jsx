@@ -1,8 +1,9 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { Container } from 'react-bootstrap';
 import './styles/Graph.css';
 import Cell from './Cell';
 import BFS from '../utils/BFS.js';
-import { Container } from 'react-bootstrap';
+import generateMaze from '../utils/Maze';
 
 
 function computeBoard(ROWS, COLS) {
@@ -70,14 +71,41 @@ function Graph(props) {
 	// Run BFS with pre-existing graph data
 	useEffect(() => {
 		console.log('Graph.js, props.run:', props.run);
-		if (addedStart && addedEnd) {
-			// Disable all event listeners here for click in Cells
-			console.log('Graph.js: Running BFS...');
-			const path = BFS(nodes, start, end);
-			console.log('Graph.js: Returned path is:', path);
+		const startBFS = async () => {
+			if (addedStart && addedEnd) {
+				// Disable all event listeners here for click in Cells
+				console.log('Graph.js: Running BFS...');
+				const path = await BFS(nodes, start, end);
+				console.log('Graph.js: Returned path is:', path);
+			}
+		};
+		try {
+			startBFS();
+		} catch (error) {
+			console.error();
 		}
 		// console.log(nodesRef.current);
 	}, [props.run]);
+
+	// Hook that runs when Generate Maze is clicked
+	useEffect(() => {
+		console.log('Graph.js: props.generate:', props.generate);
+		const genMaze = async () => {
+			if (addedStart && addedEnd) {
+				console.log('Graph.js: Generating Maze...');
+				const walls = await generateMaze(nodes, start, end);
+				console.log('Graph.js: Nodes with walls...', walls);
+				setNodes([...walls]);
+			} else {
+				console.log('Graph.js: Start or End isn\'t added yet');
+			}
+		};
+		try {
+			genMaze();
+		} catch (error) {
+			console.error();
+		}
+	}, [props.generate])
 
 	console.log('Graph.js: On render and state/props change [nodes]:', nodes);
 
