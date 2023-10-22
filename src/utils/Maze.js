@@ -1,5 +1,3 @@
-import Stack from "./Stack.js";
-
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -9,9 +7,54 @@ function shuffle(array) {
     return array
 }
 
+// Up, Down, Left, Right
+const neiEnums = [{y: 2, x: 0}, {y: -2, x: 0}, {y: 0, x: -2}, {y: 0, x: 2}];
+let visited = new Set();
+let board = null;
+function getWalls(currNode, ROWS, COLS) {
+
+    // Base Cases:
+    if (visited.has(currNode)) {
+        console.log('Maze.js: reached visited node [currNode]', currNode);
+        console.log('======================================================================\n');
+        return;
+    }
+    console.log('\n======================================================================');
+    console.log('Maze.js: [currNode]', currNode);
+    visited.add(JSON.stringify([currNode[0], currNode[1]]));
+
+    // Get all neighbouring available nodes
+    let nonBarrierNodes = [];
+    neiEnums.forEach((deltas, _index) => {
+        const {y: deltaY, x: deltaX} = deltas;
+        const newCoords = {y: currNode[0] + deltaY, x: currNode[1] + deltaX};
+        // console.log('Maze.js: [newCoords]', newCoords);
+        if (0 <= newCoords.y && newCoords.y < ROWS && 0 <= newCoords.x && newCoords.x < COLS) {
+            const nonBarrierNode = [newCoords.y, newCoords.x];
+            nonBarrierNodes.push([nonBarrierNode, deltas]);
+        }
+    });
+    // console.log('Maze.js: [nonBarrierNodes] before shuffle', nonBarrierNodes);
+    nonBarrierNodes = shuffle(nonBarrierNodes);
+    console.log('Maze.js: available neighbor candidate => [nonBarrierNodes]', nonBarrierNodes);
+    nonBarrierNodes.forEach((node, _index) => {
+        // Create a path from current node to the next available node by removing barrier between them
+        // Given that the barrier node to be removed is not an End point
+        const [pathToNode, delta] = node;
+        const [newDeltaY, newDeltaX] = [-1 * Math.trunc(delta.y / 2), -1 * Math.trunc(delta.x / 2)];
+        const [bnodeY, bnodeX] = [pathToNode[0] + newDeltaY, pathToNode[1] + newDeltaX];
+        if (!visited.has(JSON.stringify(pathToNode)) && !board[bnodeY][bnodeX].isEnd) {
+            board[bnodeY][bnodeX]['backgroundColor'] = '';
+            board[bnodeY][bnodeX]['isWall'] = false;
+            getWalls(pathToNode, ROWS, COLS);
+        }
+    });
+    console.log('======================================================================');
+
+}
+
 
 async function generateMaze(grid, start, end) {
-
     console.log('Maze.js: Start is:', start);
     console.log('Maze.js: End is:', end);
     console.log('Maze.js: Grid is:', grid);
@@ -50,45 +93,25 @@ async function generateMaze(grid, start, end) {
         }
     }
 
-    // Up, Down, Left, Right
-    const neiEnums = [{y: 2, x: 0}, {y: -2, x: 0}, {y: 0, x: -2}, {y: 0, x: 2}];
-    let frontier = new Stack();
-    let visited = new Set();
-    frontier.push([startX, startY]);
-    visited.add(JSON.stringify([startX, startY]));
-    // console.log('Maze.js: [currNode]', frontier);
-    console.log('Maze.js: [!frontier.isEmpty()]', !frontier.isEmpty());
-    while (!frontier.isEmpty()) {
-        const currNode = frontier.pop(); 
-        console.log('Maze.js: [currNode]', currNode);
-        let nonBarrierNodes = [];
-        neiEnums.forEach((deltas, _index) => {
-            const {y: deltaY, x: deltaX} = deltas;
-            const newCoords = {y: currNode.y + deltaY, x: currNode.x + deltaX};
-            if (0 <= newCoords.y && newCoords.y < ROWS && 0 <= newCoords.x && newCoords.x < COLS) {
-                const barrierNode = [newCoords.y, newCoords.x];
-                if (!visited.has(JSON.stringify(barrierNode)) && !grid[newCoords.y][newCoords.x].isStart && !grid[newCoords.y][newCoords.x].isEnd) {
-                    neiBarriers.push([barrierNode, deltas]);
-                    visited.add(barrierNode);
-                }
+    board = [...grid];
+
+    // Randomized DFS for generating a maze
+    getWalls([startX, startY], ROWS, COLS);
+
+    console.log('Maze.js: Board after maze generation [board]:', board);
+
+    // Animate walls appending to the grid here
+    for (let row = 0; row < board.length; row++) {
+        for (let col = 0; col < board[row].length; col++) {
+            if (board[row][col].isWall) {
+                let cell = document.getElementById(`${row}-${col}`);
+                cell.style.backgroundColor = '#00008B';
+                cell.classList.add('animate', 'pop');
             }
-        });
-        nonBarrierNodes = shuffle(nonBarrierNodes);
-        nonBarrierNodes.forEach((node, _index) => {
-            // Create a path from current node to the next available node by removing barrier between them
-            // Given that the barrier node to be removed is not an End point
-            const [pathNode, delta] = node;
-            const [newDeltaY, newDeltaX] = [-1 * Math.trunc(delta.y / 2), -1 * Math.trunc(delta.x / 2)];
-            const [bnodeY, bnodeX] = [pathNode[0] + newDeltaY, pathNode[1] + newDeltaX];
-            if (!grid[bnodeY][bnodeX].isEnd) {
-                grid[bnodeY][bnodeX]['backgroundColor'] = '';
-                grid[bnodeY][bnodeX]['isWall'] = false;
-            }
-            frontier.push(node);
-            console.log('Maze.js: [currNode]', frontier);
-        });
+            await sleep(10);
+        }
     }
-    return grid;
+    return board;
 }
 
 export default generateMaze;
