@@ -61,10 +61,6 @@ function Graph(props) {
 		setAddedEnd(false);
 		setStart(null);
 		setEnd(null);
-        // console.log('Graph:', props.height, props.width);
-        // console.log('Board Dimensions:', ROWS, COLS)
-        // console.log(nodes);
-        // console.log(graph);
     }, [props.width, props.height, props.reset]);
 
 	// Hook that runs when Run BFS button is clicked
