@@ -151,19 +151,24 @@ async function generateMaze(grid, start, end) {
     console.log('Maze.js: Wall segments [wallSegments]:', wallSegments);
 
     // Animate walls appending to the grid here
-    for (let i = 0; i < wallSegments.length; i++) {
-        const segment = wallSegments[i];
-        for (let j = 0; j < segment.length; j++) {
-            const [row, col] = wallSegments[i][j];
-            let cell = document.getElementById(`${row}-${col}`);
-            cell.style.backgroundColor = '#00008B';
-            cell.classList.add('animate', 'pop');
+    const animateWalls = async () => {
+        console.log('Maze.js: Animating walls appending');
+        for (let i = 0; i < wallSegments.length; i++) {
+            const segment = wallSegments[i];
+            for (let j = 0; j < segment.length; j++) {
+                const [row, col] = wallSegments[i][j];
+                let cell = document.getElementById(`${row}-${col}`);
+                cell.style.backgroundColor = '#00008B';
+                cell.classList.add('animate', 'pop');
+                await sleep(10);
+            }
             await sleep(10);
         }
-        await sleep(10);
     }
-
+    await animateWalls();
+    console.log('Maze.js: Returning board with new data');
     return board;
+    // return new Promise(resolve => resolve(board));
 }
 
 export default generateMaze;

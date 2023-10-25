@@ -1,7 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Graph from './components/Graph';
 import ConfigBar from './components/ConfigBar';
-import logo from './logo.svg';
 import './App.css';
 
 function App() {
@@ -11,6 +10,7 @@ function App() {
 	const [run, setRun] = useState(false);
 	const [reset, setReset] = useState(false);
 	const [generate, setGenerate] = useState(false);
+	const [btnStates, setButtonStates] = useState({'gen-maze': false, 'search-algo': false, 'reset-board': false});
 
 	useEffect(() => {
 		const resizeObserver = new ResizeObserver((event) => {
@@ -30,18 +30,28 @@ function App() {
 	}
 
 	const clearBoard = () => {
+		console.log('App.js: clearBoard()');
 		setReset(!reset);
+		console.log('App.js: Changed props.reset');
 	}
 
 	const generateMaze = () => {
+		console.log('App.js: generateMaze()');
 		setGenerate(!generate);
+		console.log('App.js: Changed props.generate');
+	}
+
+	const setBtnStates = (states) => {
+		console.log('App.js: setBtnStates() Setting button states')
+		setButtonStates(states);
+		console.log('App.js: Changed btnStates')
 	}
 
 	return (
 		<div className="App">
-			<ConfigBar runBfs={runBfs} clearBoard={clearBoard} generateMaze={generateMaze}/>
+			<ConfigBar runBfs={runBfs} clearBoard={clearBoard} generateMaze={generateMaze} btnStates={btnStates}/>
 			<div id='graph-parent'>
-				<Graph width={width} height={height} run={run} reset={reset} generate={generate}/>
+				<Graph width={width} height={height} run={run} reset={reset} generate={generate} setBtnStates={setBtnStates}/>
 			</div>
 		</div>
 	);

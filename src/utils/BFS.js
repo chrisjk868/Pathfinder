@@ -88,7 +88,6 @@ async function BFS(grid, start, end) {
             return path; // From end to start
         };
         const path = await reconstructPath([end.y, end.x], adjacency);
-        console.log(path);
         return path.reverse(); // From start to end
     }
     console.log('BFS.js: Path isn\'t reachable');

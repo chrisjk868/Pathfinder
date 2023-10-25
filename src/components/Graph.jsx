@@ -1,21 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { Container } from 'react-bootstrap';
 import './styles/Graph.css';
 import Cell from './Cell';
 import BFS from '../utils/BFS.js';
 import generateMaze from '../utils/Maze';
-
-
-function computeBoard(ROWS, COLS) {
-	const graph = [];
-	for (let row = 0; row < ROWS; row++) {
-		graph.push([]);
-		for (let col = 0; col < COLS; col++) {
-			graph[row].push([]);
-		}
-	}
-	return graph;
-}
 
 function computeNodes(ROWS, COLS) {
     return (
@@ -42,7 +29,6 @@ function Graph(props) {
 	const nodesRef = useRef([]);
     const [ROWS, COLS] = [ Math.floor(props.height / 20), Math.floor(props.width / 35) ];
     const [nodes, setNodes] = useState([]);
-    const [graph, setGraph] = useState([]);
     const [addedStart, setAddedStart] = useState(false);
     const [addedEnd, setAddedEnd] = useState(false);
 	const [start, setStart] = useState(null);
@@ -56,7 +42,6 @@ function Graph(props) {
 			cells[i].classList.remove('animate', 'pop', 'animate1', 'pop1');
 		}
         setNodes(computeNodes(ROWS, COLS));
-        setGraph(computeBoard(ROWS, COLS));
 		setAddedStart(false);
 		setAddedEnd(false);
 		setStart(null);
@@ -66,12 +51,15 @@ function Graph(props) {
 	// Hook that runs when Run BFS button is clicked
 	// Run BFS with pre-existing graph data
 	useEffect(() => {
-		console.log('Graph.js, props.run:', props.run);
+		console.log('Graph.js, props.run:', `props.run: ${props.run} | props.reset: ${props.reset}`);
 		const startBFS = async () => {
 			if (addedStart && addedEnd) {
 				// Disable all event listeners here for click in Cells
+				// Disable all buttons and user interactions when algo is running
 				console.log('Graph.js: Running BFS...');
+				props.setBtnStates({'gen-maze': true, 'search-algo': true, 'reset-board': true});
 				const path = await BFS(nodes, start, end);
+				props.setBtnStates({'gen-maze': false, 'search-algo': false, 'reset-board': false});
 				console.log('Graph.js: Returned path is:', path);
 			}
 		};
@@ -89,7 +77,9 @@ function Graph(props) {
 		const genMaze = async () => {
 			if (addedStart && addedEnd) {
 				console.log('Graph.js: Generating Maze...');
+				props.setBtnStates({'gen-maze': true, 'search-algo': true, 'reset-board': true});
 				const walls = await generateMaze(nodes, start, end);
+				props.setBtnStates({'gen-maze': false, 'search-algo': false, 'reset-board': false});
 				console.log('Graph.js: Nodes with walls...', walls);
 				setNodes([...walls]);
 			} else {
@@ -97,13 +87,13 @@ function Graph(props) {
 			}
 		};
 		try {
-			genMaze();
+			genMaze()
 		} catch (error) {
 			console.error();
 		}
 	}, [props.generate])
 
-	console.log('Graph.js: On render and state/props change [nodes]:', nodes);
+	console.log('Graph.js: On render and state/props change [nodes]:', nodes, `[props.reset]: ${props.reset}`);
 
     // Recieving data from child cell
     const handleCick = (coords) => {
@@ -134,7 +124,7 @@ function Graph(props) {
     
     return (
         <div className='graph'>
-            {graph.map((row, rowIdx) => {
+            {nodes.map((row, rowIdx) => {
                 let rowId = `row-${rowIdx}`;
                 return (
                     <div id={rowId} key={rowIdx} ref={(el) => {nodesRef.current[rowIdx] = el;}}>
