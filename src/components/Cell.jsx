@@ -23,7 +23,7 @@ function Cell(props) {
     }, [props.backgroundColor]);
 
 
-    console.log('Cell.js: Rendered');
+    // console.log('Cell.js: Rendered');
 
     let getCoords = () => {
         const res = { x: props.col, y: props.row }

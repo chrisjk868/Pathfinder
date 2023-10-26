@@ -76,6 +76,14 @@ function Graph(props) {
 		console.log('Graph.js: props.generate:', props.generate);
 		const genMaze = async () => {
 			if (addedStart && addedEnd) {
+				const cells = document.getElementsByClassName('cell');
+				for (let i = 0; i < cells.length; i++) {
+					const [row, col] = (cells[i].id).split('-');
+					if (!nodes[row][col].isStart && !nodes[row][col].isEnd) {
+						cells[i].style.backgroundColor = '';
+						cells[i].classList.remove('animate', 'pop', 'animate1', 'pop1');
+					}
+				}
 				console.log('Graph.js: Generating Maze...');
 				props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'reset-board': true}));
 				const walls = await generateMaze(nodes, start, end);

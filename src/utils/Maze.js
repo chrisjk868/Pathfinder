@@ -167,7 +167,6 @@ async function generateMaze(grid, start, end) {
         }
     }
     await animateWalls();
-    console.log('Maze.js: Returning board with new data');
     return board;
     // return new Promise(resolve => resolve(board));
 }
