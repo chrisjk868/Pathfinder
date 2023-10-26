@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Graph from './components/Graph';
 import ConfigBar from './components/ConfigBar';
 import './App.css';
@@ -10,7 +10,7 @@ function App() {
 	const [run, setRun] = useState(false);
 	const [reset, setReset] = useState(false);
 	const [generate, setGenerate] = useState(false);
-	const [btnStates, setButtonStates] = useState({'gen-maze': false, 'search-algo': false, 'reset-board': false});
+	const [btnStates, setButtonStates] = useState(JSON.stringify({'gen-maze': false, 'search-algo': false, 'reset-board': false}));
 
 	useEffect(() => {
 		const resizeObserver = new ResizeObserver((event) => {
@@ -23,21 +23,23 @@ function App() {
 		// console.log('Graph Container', width, height);
 	}, [width, height]);
 
+	console.log('App.js: App rendered');
+
 	const runBfs = () => {
 		console.log('App.js: runBfs()');
-		setRun(!run);
+		setRun((run) => !run);
 		console.log('App.js: Changed props.run');
 	}
 
 	const clearBoard = () => {
 		console.log('App.js: clearBoard()');
-		setReset(!reset);
+		setReset((reset) => !reset);
 		console.log('App.js: Changed props.reset');
 	}
 
 	const generateMaze = () => {
 		console.log('App.js: generateMaze()');
-		setGenerate(!generate);
+		setGenerate((generate) => !generate);
 		console.log('App.js: Changed props.generate');
 	}
 

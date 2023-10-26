@@ -71,6 +71,7 @@ function getIslands(ROWS, COLS) {
                 let frontier = new Queue();
                 frontier.enqueue([currNode.y, currNode.x]);
                 visited.add(JSON.stringify([currNode.y, currNode.x]));
+                segment.push([currNode.y, currNode.x]);
                 while (!frontier.isEmpty()) {
                     let curr = frontier.dequeue();
                     // console.log('Maze.js: current node:', curr);
@@ -116,23 +117,23 @@ async function generateMaze(grid, start, end) {
         for (let col = 0; col < COLS; col++) {
             if (startX % 2 === 0) {
                 if (col % 2 === 1 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
-                    board[row][col]['backgroundColor'] = '#00008B';
+                    // board[row][col]['backgroundColor'] = 'cyan';
                     board[row][col]['isWall'] = true;
                 }
             } else {
                 if (col % 2 === 0 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
-                    board[row][col]['backgroundColor'] = '#00008B';
+                    // board[row][col]['backgroundColor'] = 'cyan';
                     board[row][col]['isWall'] = true;
                 }
             }
             if (startY % 2 === 0) {
                 if (row % 2 === 1 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
-                    board[row][col]['backgroundColor'] = '#00008B';
+                    // board[row][col]['backgroundColor'] = 'cyan';
                     board[row][col]['isWall'] = true;
                 }
             } else {
                 if (row % 2 === 0 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
-                    board[row][col]['backgroundColor'] = '#00008B';
+                    // board[row][col]['backgroundColor'] = 'cyan';
                     board[row][col]['isWall'] = true;
                 }
             }

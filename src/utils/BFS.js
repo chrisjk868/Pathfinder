@@ -83,7 +83,7 @@ async function BFS(grid, start, end) {
                 }
                 path.push(curr);
                 curr = adjacency[curr] // Visit Parent from Child
-                await sleep(50);
+                await sleep(25);
             }
             return path; // From end to start
         };
