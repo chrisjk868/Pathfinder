@@ -32,6 +32,7 @@ function Graph(props) {
 	const [disableCells, setDisableCells] = useState(false);
     const [addedStart, setAddedStart] = useState(false);
     const [addedEnd, setAddedEnd] = useState(false);
+	const [isMouseDown, setIsMouseDown] = useState(false);
 	const [start, setStart] = useState(null);
 	const [end, setEnd] = useState(null);
 
@@ -138,9 +139,20 @@ function Graph(props) {
         // Change the state of the related cell in nodes
         setNodes(newNodes);
     }
+
+	const dragToFill = (coords) => {
+		let newNodes = [...nodes];
+		const {x: x, y: y} = coords;
+		if (isMouseDown) {
+			newNodes[y][x]['backgroundColor'] = '#00008B';
+			newNodes[y][x]['isWall'] = true;
+			console.log('mouse down over:', x, y);
+		}
+		setNodes(newNodes);
+	}
     
     return (
-        <div className='graph'>
+        <div className='graph' onMouseDown={() => {setIsMouseDown(true)}} onMouseUp={() => {setIsMouseDown(false)}}>
             {nodes.map((row, rowIdx) => {
                 let rowId = `row-${rowIdx}`;
                 return (
@@ -153,7 +165,9 @@ function Graph(props) {
                                                   col={colIdx}
 												  disabled={disableCells}
                                                   handleClick={handleCick}
+												  dragToFill={dragToFill}
                                                   backgroundColor={nodes[rowIdx][colIdx]['backgroundColor']}
+												  addWalls={addedStart && addedEnd}
                                                   key={[colIdx, rowIdx]}
                                             />);
                                 return cell;

@@ -16,7 +16,6 @@ function Cell(props) {
     };
 
     const[style, setStyle] = useState(defaultStyles);
-    // const[reset, setReset] = useState(false);
 
     useEffect(() => {
         setStyle(defaultStyles);
@@ -25,16 +24,21 @@ function Cell(props) {
 
     console.log('Cell.js: Rendered [props.disabled]', props.disabled);
 
-    let getCoords = () => {
+    const getCoords = () => {
         const res = { x: props.col, y: props.row }
         return res;
     }
-
+    
     return (
-        <div className='cell' id={`${props.id}`} style={style} onClick={!props.disabled ? () => {
+        <div className='cell'
+             id={`${props.id}`}
+             style={style}
+             onClick={!props.disabled ? () => {
                 props.handleClick(getCoords()); // Sending data back to graph when a cell is clicked
-            } : () => {}
-        }>
+             } : () => {}}
+             onMouseEnter={(props.addWalls) ? () => {
+                props.dragToFill(getCoords());
+             } : () => {}}>
         </div>
     )
 }
