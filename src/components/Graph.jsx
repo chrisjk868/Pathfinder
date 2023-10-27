@@ -27,8 +27,9 @@ function computeNodes(ROWS, COLS) {
 function Graph(props) {
 
 	const nodesRef = useRef([]);
-    const [ROWS, COLS] = [ Math.floor(props.height / 17), Math.floor(props.width / 35) ];
+    const [ROWS, COLS] = [ Math.floor(props.height / 20), Math.floor(props.width / 65) ];
     const [nodes, setNodes] = useState([]);
+	const [disableCells, setDisableCells] = useState(false);
     const [addedStart, setAddedStart] = useState(false);
     const [addedEnd, setAddedEnd] = useState(false);
 	const [start, setStart] = useState(null);
@@ -56,11 +57,15 @@ function Graph(props) {
 			if (addedStart && addedEnd) {
 				// Disable all event listeners here for click in Cells
 				// Disable all buttons and user interactions when algo is running
+				setDisableCells(!disableCells);
 				console.log('Graph.js: Running BFS...');
 				props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'reset-board': true}));
 				const path = await BFS(nodes, start, end);
 				props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'reset-board': false}));
 				console.log('Graph.js: Returned path is:', path);
+				setDisableCells((disableCells) => {
+					return !disableCells;
+				});
 			}
 		};
 		try {
@@ -76,6 +81,7 @@ function Graph(props) {
 		console.log('Graph.js: props.generate:', props.generate);
 		const genMaze = async () => {
 			if (addedStart && addedEnd) {
+				setDisableCells(!disableCells);
 				const cells = document.getElementsByClassName('cell');
 				for (let i = 0; i < cells.length; i++) {
 					const [row, col] = (cells[i].id).split('-');
@@ -90,6 +96,9 @@ function Graph(props) {
 				props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'reset-board': false}));
 				console.log('Graph.js: Nodes with walls...', walls);
 				setNodes([...walls]);
+				setDisableCells((disableCells) => {
+					return !disableCells;
+				});
 			} else {
 				console.log('Graph.js: Start or End isn\'t added yet');
 			}
@@ -142,6 +151,7 @@ function Graph(props) {
                                 let cell = (<Cell id={cellId}
 												  row={rowIdx}
                                                   col={colIdx}
+												  disabled={disableCells}
                                                   handleClick={handleCick}
                                                   backgroundColor={nodes[rowIdx][colIdx]['backgroundColor']}
                                                   key={[colIdx, rowIdx]}

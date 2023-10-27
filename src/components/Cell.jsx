@@ -23,7 +23,7 @@ function Cell(props) {
     }, [props.backgroundColor]);
 
 
-    // console.log('Cell.js: Rendered');
+    console.log('Cell.js: Rendered [props.disabled]', props.disabled);
 
     let getCoords = () => {
         const res = { x: props.col, y: props.row }
@@ -31,9 +31,9 @@ function Cell(props) {
     }
 
     return (
-        <div className='cell' id={`${props.id}`} style={style} onClick={() => {
+        <div className='cell' id={`${props.id}`} style={style} onClick={!props.disabled ? () => {
                 props.handleClick(getCoords()); // Sending data back to graph when a cell is clicked
-            }
+            } : () => {}
         }>
         </div>
     )
