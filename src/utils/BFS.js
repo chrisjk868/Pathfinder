@@ -67,7 +67,7 @@ async function BFS(grid, start, end) {
         });
         // console.log('BFS.js: Child(y, x) : Parent(y, x) | From(Parent) To(Child)', adjacency);
         // console.log('==================================================================\n');
-        await sleep(5);
+        await sleep(10);
     }
     if (reachable) {
         const reconstructPath = async (end, adjacency) => {

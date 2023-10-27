@@ -117,23 +117,19 @@ async function generateMaze(grid, start, end) {
         for (let col = 0; col < COLS; col++) {
             if (startX % 2 === 0) {
                 if (col % 2 === 1 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
-                    // board[row][col]['backgroundColor'] = 'cyan';
                     board[row][col]['isWall'] = true;
                 }
             } else {
                 if (col % 2 === 0 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
-                    // board[row][col]['backgroundColor'] = 'cyan';
                     board[row][col]['isWall'] = true;
                 }
             }
             if (startY % 2 === 0) {
                 if (row % 2 === 1 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
-                    // board[row][col]['backgroundColor'] = 'cyan';
                     board[row][col]['isWall'] = true;
                 }
             } else {
                 if (row % 2 === 0 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
-                    // board[row][col]['backgroundColor'] = 'cyan';
                     board[row][col]['isWall'] = true;
                 }
             }
@@ -157,18 +153,18 @@ async function generateMaze(grid, start, end) {
         for (let i = 0; i < wallSegments.length; i++) {
             const segment = wallSegments[i];
             for (let j = 0; j < segment.length; j++) {
-                const [row, col] = wallSegments[i][j];
+                const [row, col] = wallSegments[i][j]
+                board[row][col]['backgroundColor'] = '#00008B';
                 let cell = document.getElementById(`${row}-${col}`);
                 cell.style.backgroundColor = '#00008B';
                 cell.classList.add('animate', 'pop');
-                await sleep(10);
+                await sleep(15);
             }
-            await sleep(10);
+            await sleep(15);
         }
     }
     await animateWalls();
     return board;
-    // return new Promise(resolve => resolve(board));
 }
 
 export default generateMaze;

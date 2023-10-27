@@ -27,7 +27,7 @@ function computeNodes(ROWS, COLS) {
 function Graph(props) {
 
 	const nodesRef = useRef([]);
-    const [ROWS, COLS] = [ Math.floor(props.height / 20), Math.floor(props.width / 35) ];
+    const [ROWS, COLS] = [ Math.floor(props.height / 17), Math.floor(props.width / 35) ];
     const [nodes, setNodes] = useState([]);
     const [addedStart, setAddedStart] = useState(false);
     const [addedEnd, setAddedEnd] = useState(false);
