@@ -1,4 +1,5 @@
 import Queue from "./Queue.js";
+import BFS from "./BFS.js";
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -14,16 +15,10 @@ let visitedWalls = new Set();
 const neiEnums = [{y: 2, x: 0}, {y: -2, x: 0}, {y: 0, x: -2}, {y: 0, x: 2}];
 function getWalls(currNode, ROWS, COLS) {
 
-    // console.log(visitedWalls);
-
     // Base Cases:
     if (visitedWalls.has(currNode)) {
-        // console.log('Maze.js: reached visited node [currNode]', currNode);
-        // console.log('======================================================================\n');
         return;
     }
-    // console.log('\n======================================================================');
-    // console.log('Maze.js: [currNode]', currNode);
     visitedWalls.add(JSON.stringify([currNode[0], currNode[1]]));
 
     // Get all neighbouring available nodes
@@ -31,15 +26,12 @@ function getWalls(currNode, ROWS, COLS) {
     neiEnums.forEach((deltas, _index) => {
         const {y: deltaY, x: deltaX} = deltas;
         const newCoords = {y: currNode[0] + deltaY, x: currNode[1] + deltaX};
-        // console.log('Maze.js: [newCoords]', newCoords);
         if (0 <= newCoords.y && newCoords.y < ROWS && 0 <= newCoords.x && newCoords.x < COLS) {
             const nonBarrierNode = [newCoords.y, newCoords.x];
             nonBarrierNodes.push([nonBarrierNode, deltas]);
         }
     });
-    // console.log('Maze.js: [nonBarrierNodes] before shuffle', nonBarrierNodes);
     nonBarrierNodes = shuffle(nonBarrierNodes);
-    // console.log('Maze.js: available neighbor candidate => [nonBarrierNodes]', nonBarrierNodes);
     nonBarrierNodes.forEach((node, _index) => {
         // Create a path from current node to the next available node by removing barrier between them
         // Given that the barrier node to be removed is not an End point
@@ -52,10 +44,9 @@ function getWalls(currNode, ROWS, COLS) {
             getWalls(pathToNode, ROWS, COLS);
         }
     });
-    // console.log('======================================================================\n');
 }
 
-function getIslands(ROWS, COLS) {
+function getIslands(ROWS, COLS, getPockets=false) {
     let segments = [];
     let visited = new Set();
     const neiEnums = [{y: 1, x: 0}, {y: -1, x: 0}, {y: 0, x: -1}, {y: 0, x: 1}];
@@ -65,8 +56,8 @@ function getIslands(ROWS, COLS) {
                 continue;
             }
             let currNode = board[row][col];
-            if (currNode.isWall) {
-                // console.log('\n====================== (Starting BFS for segments) ======================');
+            const targetCurrNode = getPockets ? (!currNode.isWall && !currNode.isStart && !currNode.isEnd) : currNode.isWall;
+            if (targetCurrNode) {
                 let segment = [];
                 let frontier = new Queue();
                 frontier.enqueue([currNode.y, currNode.x]);
@@ -74,14 +65,13 @@ function getIslands(ROWS, COLS) {
                 segment.push([currNode.y, currNode.x]);
                 while (!frontier.isEmpty()) {
                     let curr = frontier.dequeue();
-                    // console.log('Maze.js: current node:', curr);
                     neiEnums.forEach((deltas, _index) => {
                         const {y: deltaY, x: deltaX} = deltas;
                         const newCoords = {y: curr[0] + deltaY, x: curr[1] + deltaX};
                         if (0 <= newCoords.y && newCoords.y < ROWS && 0 <= newCoords.x && newCoords.x < COLS) {
-                            // console.log('Maze.js: node to visit:', newCoords);
                             const newNode = board[newCoords.y][newCoords.x];
-                            if (!visited.has(JSON.stringify([newNode.y, newNode.x])) && newNode.isWall) {
+                            const targetNewNode = getPockets ? (!newNode.isWall && !newNode.isStart && !newNode.isEnd) : newNode.isWall;
+                            if (!visited.has(JSON.stringify([newNode.y, newNode.x])) && targetNewNode) {
                                 frontier.enqueue([newNode.y, newNode.x]);
                                 visited.add(JSON.stringify([newNode.y, newNode.x]));
                                 segment.push([newNode.y, newNode.x]);
@@ -90,13 +80,25 @@ function getIslands(ROWS, COLS) {
                     });
                 }
                 segments.push(segment);
-                // console.log('======================================================================\n');
             }
         }
     }
 
     return segments;
 
+}
+
+function pathExists(grid, start, end) {
+    // while there's no path continue path building algorithm
+    let focus = end;
+    while (!(BFS(grid, start, end, false)).length) {
+        // 1. get all empty pockets
+        let pockets = getIslands(grid.length, grid[0].length, true);
+        console.log('Maze.js: [pockets]:', pockets);
+        // 2. find the closest empty pocket to the end point
+        // 3. create a path between empty pocket and end point
+        // 4. update focus to the empty pocket where a path is recently created
+    }
 }
 
 
@@ -137,19 +139,17 @@ async function generateMaze(grid, start, end) {
     }
 
     // Randomized DFS for generating a maze
-    console.log('Maze.js: Randomized DFS => [visitedWalls]:', visitedWalls);
     visitedWalls.clear();
     getWalls([startY, startX], ROWS, COLS);
 
-    console.log('Maze.js: Board after maze generation [board]:', board);
+    // Ensure that a path exists from the start point to the end point for the generated maze
+    // pathExists(board, start, end);
 
     // Get all wall segments
     const wallSegments = getIslands(ROWS, COLS);
-    console.log('Maze.js: Wall segments [wallSegments]:', wallSegments);
 
     // Animate walls appending to the grid here
     const animateWalls = async () => {
-        console.log('Maze.js: Animating walls appending');
         for (let i = 0; i < wallSegments.length; i++) {
             const segment = wallSegments[i];
             for (let j = 0; j < segment.length; j++) {
