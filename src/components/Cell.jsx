@@ -36,7 +36,7 @@ function Cell(props) {
              onClick={!props.disabled ? () => {
                 props.handleClick(getCoords()); // Sending data back to graph when a cell is clicked
              } : () => {}}
-             onMouseEnter={(props.addWalls) ? () => {
+             onMouseEnter={(props.addWalls && !props.disabled) ? () => {
                 props.dragToFill(getCoords());
              } : () => {}}>
         </div>

@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import './styles/Graph.css';
 import Cell from './Cell';
 import BFS from '../utils/BFS.js';
-import generateMaze from '../utils/Maze';
+import generateMaze from '../utils/DFSMaze.js';
 
 function computeNodes(ROWS, COLS) {
     return (
@@ -152,7 +152,7 @@ function Graph(props) {
 	}
     
     return (
-        <div className='graph' onMouseDown={() => {setIsMouseDown(true)}} onMouseUp={() => {setIsMouseDown(false)}}>
+        <div className='graph' onMouseDown={() => {setIsMouseDown(true)}} onMouseUp={() => {setIsMouseDown(false)}} onMouseLeave={() => {setIsMouseDown(false)}}>
             {nodes.map((row, rowIdx) => {
                 let rowId = `row-${rowIdx}`;
                 return (
