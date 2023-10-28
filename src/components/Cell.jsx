@@ -22,7 +22,7 @@ function Cell(props) {
     }, [props.backgroundColor]);
 
 
-    console.log('Cell.js: Rendered [props.disabled]', props.disabled);
+    // console.log('Cell.js: Rendered [props.disabled]', props.disabled);
 
     const getCoords = () => {
         const res = { x: props.col, y: props.row }

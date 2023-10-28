@@ -38,6 +38,7 @@ function Graph(props) {
 
     // Hook that rerenders the board if the size of window changes or clear board is pressed
     useEffect(() => {
+		console.log('Graph.js: Board reset ran');
 		const cells = document.getElementsByClassName('cell');
 		for (let i = 0; i < cells.length; i++) {
 			cells[i].style.backgroundColor = '';
@@ -82,11 +83,12 @@ function Graph(props) {
 		console.log('Graph.js: props.generate:', props.generate);
 		const genMaze = async () => {
 			if (addedStart && addedEnd) {
+				console.log('Graph.js: Nodes before maze generation [nodes]:', nodes);
 				setDisableCells(!disableCells);
 				const cells = document.getElementsByClassName('cell');
 				for (let i = 0; i < cells.length; i++) {
 					const [row, col] = (cells[i].id).split('-');
-					if (!nodes[row][col].isStart && !nodes[row][col].isEnd) {
+					if (!nodes[row][col].isStart && !nodes[row][col].isEnd && !nodes[row][col].isWall) {
 						cells[i].style.backgroundColor = '';
 						cells[i].classList.remove('animate', 'pop', 'animate1', 'pop1');
 					}
@@ -117,8 +119,7 @@ function Graph(props) {
     const handleCick = (coords) => {
 		let newNodes = [...nodes];
 		const {x: x, y: y} = coords;
-		// console.log(nodesRef.current[y].childNodes[x]);
-        console.log('Clicked coordinates from graph \n', coords);
+        console.log('Graph.js: Clicked coordinates from graph \n', coords);
 
 		if (!addedStart) {
 			newNodes[y][x]['backgroundColor'] = 'green';
@@ -141,6 +142,7 @@ function Graph(props) {
     }
 
 	const dragToFill = (coords) => {
+		console.log('Graph.js: Drag to fill ran \n', coords);
 		let newNodes = [...nodes];
 		const {x: x, y: y} = coords;
 		if (isMouseDown) {
