@@ -111,7 +111,6 @@ async function generateMaze(grid, start, end) {
     }
     const [ROWS, COLS] = [grid.length, grid[0].length]
     const {x: startX, y: startY} = start;
-    const {x: endX, y: endY} = end;
     board = [...grid];
 
     // Generate barriers to remove for randomized DFS

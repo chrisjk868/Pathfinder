@@ -121,23 +121,25 @@ function Graph(props) {
 		const {x: x, y: y} = coords;
         console.log('Graph.js: Clicked coordinates from graph \n', coords);
 
-		if (!addedStart) {
-			newNodes[y][x]['backgroundColor'] = 'green';
-			newNodes[y][x]['isStart'] = true;
-			setAddedStart(true);
-			setStart(newNodes[y][x]);
-		} else if (!addedEnd) {
-			newNodes[y][x]['backgroundColor'] = 'red';
-			newNodes[y][x]['isEnd'] = true;
-			setAddedEnd(true);
-			setEnd(newNodes[y][x]);
-		} else if (!newNodes[y][x]['isStart'] &&
-				   !newNodes[y][x]['isEnd']) {
-			newNodes[y][x]['backgroundColor'] = '#00008B';
-			newNodes[y][x]['isWall'] = true;
+
+		if (!newNodes[y][x].isStart && !newNodes[y][x].isEnd) {
+			if (!addedStart) {
+				newNodes[y][x].backgroundColor = 'green';
+				newNodes[y][x].isStart = true;
+				setAddedStart(true);
+				setStart(newNodes[y][x]);
+			} else if (!addedEnd) {
+				newNodes[y][x].backgroundColor = 'red';
+				newNodes[y][x].isEnd = true;
+				setAddedEnd(true);
+				setEnd(newNodes[y][x]);
+			} else {
+				newNodes[y][x].backgroundColor = '#00008B';
+				newNodes[y][x].isWall = true;
+			}
+
 		}
 
-        // Change the state of the related cell in nodes
         setNodes(newNodes);
     }
 
