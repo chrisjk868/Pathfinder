@@ -1,5 +1,6 @@
 import Queue from "./Queue.js";
 import BFS from "./BFS.js";
+import { forEach } from "lodash";
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -89,15 +90,42 @@ function getIslands(ROWS, COLS, getPockets=false) {
 }
 
 function pathExists(grid, start, end) {
+    // initalize the focus to be at the end point
     // while there's no path continue path building algorithm
-    let focus = end;
+    // 1. get all empty pockets on the board
+    // 2. find the closest empty pocket to the current point of focus
+    // 3. create a path between empty pocket and end point
+    // 4. update focus to the empty pocket where a path is recently created and then repeat steps
+    let focus = [end];
     while (!(BFS(grid, start, end, false)).length) {
-        // 1. get all empty pockets
-        let pockets = getIslands(grid.length, grid[0].length, true);
-        console.log('Maze.js: [pockets]:', pockets);
-        // 2. find the closest empty pocket to the end point
-        // 3. create a path between empty pocket and end point
-        // 4. update focus to the empty pocket where a path is recently created
+        let emptyPockets = getIslands(grid.length, grid[0].length, true);
+        let minDist = Infinity; 
+        let closestFocusNode = null;
+        let closestPocketNode = null;
+        for (const [focusY, focusX] in focus) {
+            for (const segment in emptyPockets) {
+                // Calculate the manhattan distance from all nodes in focus to all node pockets in segment
+                // Use the closest point as the reference point from focus to the current pocket
+                segment.forEach(
+                    ([y, x], _index) => {
+                        const dist = Math.sqrt(Math.pow(focusY - y, 2) + Math.pow(focusX - x, 2));
+                        if (dist <= minDist) {
+                            minDist = dist;
+                            closestPocketNode = [y, x];
+                        }
+                    }
+                );
+            }
+            // Create a passage from current focus to the closest pocket node
+            const [pNodeX, pNodeY] = closestPocketNode;
+            const [fNodeX, fNodeY] = closestFocusNode; 
+            const [deltaX, deltaY] = [fNodeX - pNodeX, fNodeY - pNodeY];
+
+            // top-left, top-right, bottom-left, bottom-right, up, down, left, right
+            
+            // Update the focus to encompass all nodes throughout the created passage
+            // focus = ;
+        }
     }
 }
 
@@ -111,6 +139,7 @@ async function generateMaze(grid, start, end) {
     }
     const [ROWS, COLS] = [grid.length, grid[0].length]
     const {x: startX, y: startY} = start;
+    const {x: endX, y: endY} = end;
     board = [...grid];
 
     // Generate barriers to remove for randomized DFS
@@ -142,7 +171,7 @@ async function generateMaze(grid, start, end) {
     getWalls([startY, startX], ROWS, COLS);
 
     // Ensure that a path exists from the start point to the end point for the generated maze
-    // pathExists(board, start, end);
+    // pathExists(board, [startY, startX], [endY, endX]);
 
     // Get all wall segments
     const wallSegments = getIslands(ROWS, COLS);
