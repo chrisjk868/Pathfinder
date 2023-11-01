@@ -102,6 +102,7 @@ function pathExists(grid, start, end) {
         let minDist = Infinity; 
         let closestFocusNode = null;
         let closestPocketNode = null;
+        let closestSegment = null;
         for (const [focusY, focusX] in focus) {
             for (const segment in emptyPockets) {
                 // Calculate the manhattan distance from all nodes in focus to all node pockets in segment
@@ -111,21 +112,33 @@ function pathExists(grid, start, end) {
                         const dist = Math.sqrt(Math.pow(focusY - y, 2) + Math.pow(focusX - x, 2));
                         if (dist <= minDist) {
                             minDist = dist;
+                            closestFocusNode = [focusY, focusX];
                             closestPocketNode = [y, x];
+                            closestSegment = segment;
                         }
                     }
                 );
             }
-            // Create a passage from current focus to the closest pocket node
-            const [pNodeX, pNodeY] = closestPocketNode;
-            const [fNodeX, fNodeY] = closestFocusNode; 
-            const [deltaX, deltaY] = [fNodeX - pNodeX, fNodeY - pNodeY];
-
-            // top-left, top-right, bottom-left, bottom-right, up, down, left, right
-            
-            // Update the focus to encompass all nodes throughout the created passage
-            // focus = ;
         }
+        // Create a passage from the closest focus node to the closest pocket node
+        const [fNodeY, fNodeX] = closestFocusNode;
+        const [pNodeY, pNodeX] = closestPocketNode;
+        const [deltaY, deltaX] = [pNodeY - fNodeY, pNodeX - fNodeX];
+
+        if (deltaX > 0) { // On the right side
+            grid[fNodeY][fNodeX + 1].isWall = false;
+        } else if (deltaX < 0) { // On the left side
+            grid[fNodeY][fNodeX - 1].isWall = false;
+        } else { // Top and bottom
+            if (deltaY > 0) {
+                grid[fNodeY + 1][fNodeX].isWall = false;
+            } else {
+                grid[fNodeY - 1][fNodeX].isWall = false;
+            }
+        }
+
+        // Update the focus to encompass all nodes throughout the created passage
+        focus = focus.concat(closestSegment);
     }
 }
 
@@ -171,7 +184,7 @@ async function generateMaze(grid, start, end) {
     getWalls([startY, startX], ROWS, COLS);
 
     // Ensure that a path exists from the start point to the end point for the generated maze
-    // pathExists(board, [startY, startX], [endY, endX]);
+    pathExists(board, [startY, startX], [endY, endX]);
 
     // Get all wall segments
     const wallSegments = getIslands(ROWS, COLS);
