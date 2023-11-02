@@ -1,9 +1,11 @@
 .configBar {
+    display: flex;
     justify-content: center;
     height: 10vh;
-    background-color: #18ba8f;
+    background-color: #414141;
 }
 
 Button {
+    height: fit-content;
     margin: 1rem;
 }

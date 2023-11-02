@@ -96,8 +96,9 @@ function pathExists(grid, start, end) {
     // 2. find the closest empty pocket to the current point of focus
     // 3. create a path between empty pocket and end point
     // 4. update focus to the empty pocket where a path is recently created and then repeat steps
+    console.log('Maze.js: Maze generation starts ...')
     let focus = [end];
-    while (!(BFS(grid, start, end, false)).length) {
+    while ((BFS(grid, start, end, false)).length === 0) {
         let emptyPockets = getIslands(grid.length, grid[0].length, true);
         let minDist = Infinity; 
         let closestFocusNode = null;
@@ -107,6 +108,7 @@ function pathExists(grid, start, end) {
             for (const segment in emptyPockets) {
                 // Calculate the manhattan distance from all nodes in focus to all node pockets in segment
                 // Use the closest point as the reference point from focus to the current pocket
+                console.log(segment);
                 segment.forEach(
                     ([y, x], _index) => {
                         const dist = Math.sqrt(Math.pow(focusY - y, 2) + Math.pow(focusX - x, 2));
@@ -121,24 +123,24 @@ function pathExists(grid, start, end) {
             }
         }
         // Create a passage from the closest focus node to the closest pocket node
-        const [fNodeY, fNodeX] = closestFocusNode;
-        const [pNodeY, pNodeX] = closestPocketNode;
-        const [deltaY, deltaX] = [pNodeY - fNodeY, pNodeX - fNodeX];
+        // const [fNodeY, fNodeX] = closestFocusNode;
+        // const [pNodeY, pNodeX] = closestPocketNode;
+        // const [deltaY, deltaX] = [pNodeY - fNodeY, pNodeX - fNodeX];
 
-        if (deltaX > 0) { // On the right side
-            grid[fNodeY][fNodeX + 1].isWall = false;
-        } else if (deltaX < 0) { // On the left side
-            grid[fNodeY][fNodeX - 1].isWall = false;
-        } else { // Top and bottom
-            if (deltaY > 0) {
-                grid[fNodeY + 1][fNodeX].isWall = false;
-            } else {
-                grid[fNodeY - 1][fNodeX].isWall = false;
-            }
-        }
+        // if (deltaX > 0) { // On the right side
+        //     grid[fNodeY][fNodeX + 1].isWall = false;
+        // } else if (deltaX < 0) { // On the left side
+        //     grid[fNodeY][fNodeX - 1].isWall = false;
+        // } else { // Top and bottom
+        //     if (deltaY > 0) {
+        //         grid[fNodeY + 1][fNodeX].isWall = false;
+        //     } else {
+        //         grid[fNodeY - 1][fNodeX].isWall = false;
+        //     }
+        // }
 
-        // Update the focus to encompass all nodes throughout the created passage
-        focus = focus.concat(closestSegment);
+        // // Update the focus to encompass all nodes throughout the created passage
+        // focus = focus.concat(closestSegment);
     }
 }
 
