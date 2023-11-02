@@ -1,6 +1,7 @@
 .configBar {
     display: flex;
     justify-content: center;
+    align-items: center;
     height: 10vh;
     background-color: #414141;
 }

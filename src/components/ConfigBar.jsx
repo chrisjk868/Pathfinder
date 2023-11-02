@@ -30,9 +30,9 @@ function ConfigBar({ runBfs, clearBoard, generateMaze, btnStates }) {
                     <Dropdown.Item>A*</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
-            <Button id="gen-maze" variant="light" onClick={() => {generateMaze();}} disabled={getState('gen-maze')}> Create Maze </Button>
-            <Button id="search-algo" variant="light" onClick={() => {runBfs();}} disabled={getState('search-algo')}> Run BFS </Button>
-            <Button id="reset-board" variant="light" onClick={() => {clearBoard();}} disabled={getState('reset-board')}> Clear Board </Button>
+            <Button id="gen-maze" variant="outline-light" onClick={() => {generateMaze();}} disabled={getState('gen-maze')}> Create Maze </Button>
+            <Button id="search-algo" variant="outline-light" onClick={() => {runBfs();}} disabled={getState('search-algo')}> Run BFS </Button>
+            <Button id="reset-board" variant="outline-light" onClick={() => {clearBoard();}} disabled={getState('reset-board')}> Clear Board </Button>
         </div>
     )
 
