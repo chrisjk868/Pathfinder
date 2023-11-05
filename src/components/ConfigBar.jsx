@@ -2,26 +2,26 @@ import { Button, Container, Dropdown } from "react-bootstrap";
 import { useState } from "react";
 import './styles/ConfigBar.css';
 
-function ConfigBar({ runBfs, clearBoard, generateMaze, btnStates }) {
+function ConfigBar({ runBfs, clearBoard, generateMaze, btnStates, handleSelect, mazeAlgo, pfAlgo }) {
 
-    const [mazeAlgo, setMazeAlgo] = useState('Select Maze Generation Algorithm');
-    const [pfAlgo, setPfAlgo] = useState('Select Path Finding Algorithm');
+    // const [mazeAlgo, setMazeAlgo] = useState('Select Maze Generation Algorithm');
+    // const [pfAlgo, setPfAlgo] = useState('Select Path Finding Algorithm');
 
     const getState = (btn) => {
         let states = JSON.parse(btnStates);
         return states[btn];
     }
 
-    const handleSelect = (_eventKey, event) => {
-        console.log(event.target.className);
-        event.preventDefault();
-        let target = event.target.className;
-        if (target === 'mazeAlgo dropdown-item') {
-            setMazeAlgo(event.target.text);
-        } else {
-            setPfAlgo(event.target.text);
-        }
-    }
+    // const handleSelect = (_eventKey, event) => {
+    //     console.log(event.target.className);
+    //     event.preventDefault();
+    //     let target = event.target.className;
+    //     if (target === 'mazeAlgo dropdown-item') {
+    //         setMazeAlgo(event.target.text);
+    //     } else {
+    //         setPfAlgo(event.target.text);
+    //     }
+    // }
 
     return (
         <div className="configBar">

@@ -11,6 +11,8 @@ function App() {
 	const [reset, setReset] = useState(false);
 	const [generate, setGenerate] = useState(false);
 	const [btnStates, setButtonStates] = useState(JSON.stringify({'gen-maze': false, 'search-algo': false, 'reset-board': false}));
+	const [mazeAlgo, setMazeAlgo] = useState('Select Maze Generation Algorithm');
+    const [pfAlgo, setPfAlgo] = useState('Select Path Finding Algorithm');
 
 	useEffect(() => {
 		const resizeObserver = new ResizeObserver((event) => {
@@ -49,11 +51,37 @@ function App() {
 		console.log('App.js: Changed btnStates')
 	}
 
+	const handleSelect = (_eventKey, event) => {
+        console.log(event.target.className);
+        event.preventDefault();
+        let target = event.target.className;
+        if (target === 'mazeAlgo dropdown-item') {
+            setMazeAlgo(event.target.text);
+        } else {
+            setPfAlgo(event.target.text);
+        }
+    }
+
 	return (
 		<div className="App">
-			<ConfigBar runBfs={runBfs} clearBoard={clearBoard} generateMaze={generateMaze} btnStates={btnStates}/>
+			<ConfigBar
+				runBfs={runBfs}
+				clearBoard={clearBoard}
+				generateMaze={generateMaze}
+				btnStates={btnStates}
+				handleSelect={handleSelect}
+				mazeAlgo={mazeAlgo}
+				pfAlgo={pfAlgo}
+			/>
 			<div id='graph-parent'>
-				<Graph width={width} height={height} run={run} reset={reset} generate={generate} setBtnStates={setBtnStates}/>
+				<Graph
+					width={width}
+					height={height}
+					run={run}
+					reset={reset}
+					generate={generate}
+					setBtnStates={setBtnStates}
+				/>
 			</div>
 		</div>
 	);
