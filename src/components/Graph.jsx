@@ -53,25 +53,49 @@ function Graph(props) {
 
 	// Hook that runs when Run BFS button is clicked
 	// Run BFS with pre-existing graph data
+	// Run the selected pathfinding algorithm
+	const startBFS = async () => {
+		if (addedStart && addedEnd) {
+			// Disable all event listeners here for click in Cells
+			// Disable all buttons and user interactions when algo is running
+			setDisableCells(!disableCells);
+			console.log('Graph.js: Running BFS...');
+			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'reset-board': true}));
+			const path = await BFS(nodes, start, end);
+			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'reset-board': false}));
+			console.log('Graph.js: Returned path is:', path);
+			setDisableCells((disableCells) => {
+				return !disableCells;
+			});
+		}
+	};
+
+	const startDFS = async () => {
+
+	}
+
+	const startDijkstra = async () => {
+
+	}
+
+	const startAstar = async () => {
+
+	}
+
 	useEffect(() => {
 		console.log('Graph.js, props.run:', `props.run: ${props.run} | props.reset: ${props.reset}`);
-		const startBFS = async () => {
-			if (addedStart && addedEnd) {
-				// Disable all event listeners here for click in Cells
-				// Disable all buttons and user interactions when algo is running
-				setDisableCells(!disableCells);
-				console.log('Graph.js: Running BFS...');
-				props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'reset-board': true}));
-				const path = await BFS(nodes, start, end);
-				props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'reset-board': false}));
-				console.log('Graph.js: Returned path is:', path);
-				setDisableCells((disableCells) => {
-					return !disableCells;
-				});
-			}
-		};
 		try {
-			startBFS();
+			if (props.pfAlgo === 'BFS') {
+				startBFS(); 
+			} else if (props.pfAlgo === 'DFS') {
+				startDFS();
+			} else if (props.pfAlgo === 'Dijkstra\'s') {
+				startDijkstra();
+			} else if (props.pfAlgo === 'A*') {
+				startAstar();
+			} else {
+				
+			}
 		} catch (error) {
 			console.error();
 		}

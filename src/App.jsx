@@ -81,6 +81,8 @@ function App() {
 					reset={reset}
 					generate={generate}
 					setBtnStates={setBtnStates}
+					mazeAlgo={mazeAlgo}
+					pfAlgo={pfAlgo}
 				/>
 			</div>
 		</div>
