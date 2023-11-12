@@ -3,6 +3,7 @@ import './styles/Graph.css';
 import Cell from './Cell';
 import BFS from '../utils/BFS.js';
 import generateMaze from '../utils/DFSMaze.js';
+import { Alert } from 'react-bootstrap';
 
 function computeNodes(ROWS, COLS) {
     return (
@@ -35,6 +36,11 @@ function Graph(props) {
 	const [isMouseDown, setIsMouseDown] = useState(false);
 	const [start, setStart] = useState(null);
 	const [end, setEnd] = useState(null);
+	const [showAlert, setShowAlert] = useState(false);
+
+	// Hook that checks when the component just mounted
+	let justMounted;
+	React.useEffect(() => { justMounted = true; }, []);
 
     // Hook that rerenders the board if the size of window changes or clear board is pressed
     useEffect(() => {
@@ -59,7 +65,7 @@ function Graph(props) {
 			// Disable all event listeners here for click in Cells
 			// Disable all buttons and user interactions when algo is running
 			setDisableCells(!disableCells);
-			console.log('Graph.js: Running BFS...');
+			console.log('Graph.js: Running BFS ...');
 			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'reset-board': true}));
 			const path = await BFS(nodes, start, end);
 			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'reset-board': false}));
@@ -71,35 +77,46 @@ function Graph(props) {
 	};
 
 	const startDFS = async () => {
-
+		if (addedStart && addedEnd) {
+			console.log('Graph.js: Running DFS ...')
+		}
 	}
 
 	const startDijkstra = async () => {
-
+		if (addedStart && addedEnd) {
+			console.log('Graph.js: Running Dijkstra\'s ...')
+		}
 	}
 
 	const startAstar = async () => {
-
+		if (addedStart && addedEnd) {
+			console.log('Graph.js: Running A* ...')
+		}
 	}
 
 	useEffect(() => {
 		console.log('Graph.js, props.run:', `props.run: ${props.run} | props.reset: ${props.reset}`);
-		try {
-			if (props.pfAlgo === 'BFS') {
-				startBFS(); 
-			} else if (props.pfAlgo === 'DFS') {
-				startDFS();
-			} else if (props.pfAlgo === 'Dijkstra\'s') {
-				startDijkstra();
-			} else if (props.pfAlgo === 'A*') {
-				startAstar();
-			} else {
-				
+		if (!justMounted) {
+			try {
+				if (props.pfAlgo === 'BFS') {
+					startBFS();
+					setShowAlert(false);
+				} else if (props.pfAlgo === 'DFS') {
+					startDFS();
+					setShowAlert(false);
+				} else if (props.pfAlgo === 'Dijkstra\'s') {
+					startDijkstra();
+					setShowAlert(false);
+				} else if (props.pfAlgo === 'A*') {
+					startAstar();
+					setShowAlert(false);
+				} else {
+					setShowAlert(true);
+				}
+			} catch (error) {
+				console.error();
 			}
-		} catch (error) {
-			console.error();
 		}
-		// console.log(nodesRef.current);
 	}, [props.run]);
 
 	// Hook that runs when Generate Maze is clicked
@@ -181,6 +198,11 @@ function Graph(props) {
     
     return (
         <div className='graph' onMouseDown={() => {setIsMouseDown(true)}} onMouseUp={() => {setIsMouseDown(false)}} onMouseLeave={() => {setIsMouseDown(false)}}>
+			<Alert show={showAlert}
+				   style={{ marginLeft: '25vw', marginRight: '25vw' }}
+				   variant='danger' id='path-finding-error'>
+					Please select a path finding algorithm
+			</Alert>
             {nodes.map((row, rowIdx) => {
                 let rowId = `row-${rowIdx}`;
                 return (

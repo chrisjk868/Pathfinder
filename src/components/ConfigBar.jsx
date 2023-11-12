@@ -2,7 +2,7 @@ import { Button, Container, Dropdown } from "react-bootstrap";
 import { useState } from "react";
 import './styles/ConfigBar.css';
 
-function ConfigBar({ runBfs, clearBoard, generateMaze, btnStates, handleSelect, mazeAlgo, pfAlgo }) {
+function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, handleSelect, mazeAlgo, pfAlgo }) {
 
     const getState = (btn) => {
         let states = JSON.parse(btnStates);
@@ -32,7 +32,7 @@ function ConfigBar({ runBfs, clearBoard, generateMaze, btnStates, handleSelect, 
                 </Dropdown.Menu>
             </Dropdown>
             <Button id="gen-maze" variant="outline-light" onClick={() => {generateMaze();}} disabled={getState('gen-maze')}> Create Maze </Button>
-            <Button id="search-algo" variant="outline-light" onClick={() => {runBfs();}} disabled={getState('search-algo')}> Run BFS </Button>
+            <Button id="search-algo" variant="outline-light" onClick={() => {runPfAlgo();}} disabled={getState('search-algo')}> Find Path </Button>
             <Button id="reset-board" variant="outline-light" onClick={() => {clearBoard();}} disabled={getState('reset-board')}> Clear Board </Button>
         </div>
     )

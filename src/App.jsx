@@ -27,8 +27,8 @@ function App() {
 
 	console.log('App.js: App rendered');
 
-	const runBfs = () => {
-		console.log('App.js: runBfs()');
+	const runPfAlgo = () => {
+		console.log('App.js: runPfAlgo()');
 		setRun((run) => !run);
 		console.log('App.js: Changed props.run');
 	}
@@ -65,7 +65,7 @@ function App() {
 	return (
 		<div className="App">
 			<ConfigBar
-				runBfs={runBfs}
+				runPfAlgo={runPfAlgo}
 				clearBoard={clearBoard}
 				generateMaze={generateMaze}
 				btnStates={btnStates}
