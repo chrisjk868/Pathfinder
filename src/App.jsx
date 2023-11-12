@@ -10,7 +10,7 @@ function App() {
 	const [run, setRun] = useState(false);
 	const [reset, setReset] = useState(false);
 	const [generate, setGenerate] = useState(false);
-	const [btnStates, setButtonStates] = useState(JSON.stringify({'gen-maze': false, 'search-algo': false, 'reset-board': false}));
+	const [btnStates, setButtonStates] = useState(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-bombs': false, 'reset-board': false}));
 	const [mazeAlgo, setMazeAlgo] = useState('* Select Maze Generation Algorithm');
     const [pfAlgo, setPfAlgo] = useState('* Select Path Finding Algorithm');
 

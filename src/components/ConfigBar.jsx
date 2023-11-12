@@ -38,7 +38,7 @@ function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, handleSelec
             </Dropdown>
             <Button id="gen-maze" variant="outline-light" onClick={() => {generateMaze();}} disabled={getState('gen-maze')}> Create Maze <GiMaze/> </Button>
             <Button id="search-algo" variant="outline-light" onClick={() => {runPfAlgo();}} disabled={getState('search-algo')}> Find Path <PiPathBold/> </Button>
-            <ToggleButton id="add-bomb" variant="outline-light" type="checkbox" checked={checked} onClick={(e) => { e.preventDefault(); setChecked(!checked);}}> Add Bombs <FaBomb/> </ToggleButton>
+            <ToggleButton id="add-bomb" variant="outline-light" type="checkbox" checked={checked} disabled={getState('add-bombs')} onClick={(e) => { e.preventDefault(); setChecked(!checked);}}> Add Bombs <FaBomb/> </ToggleButton>
             <Button id="reset-board" variant="outline-light" onClick={() => {clearBoard();}} disabled={getState('reset-board')}> Clear Board <PiEraserFill/> </Button>
 
         </div>

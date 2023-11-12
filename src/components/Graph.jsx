@@ -37,6 +37,7 @@ function Graph(props) {
 	const [start, setStart] = useState(null);
 	const [end, setEnd] = useState(null);
 	const [showAlert, setShowAlert] = useState(false);
+	const [alertMessage, setAlertMessage] = useState('');
 
 	// Hook that checks when the component just mounted
 	let justMounted;
@@ -66,9 +67,9 @@ function Graph(props) {
 			// Disable all buttons and user interactions when algo is running
 			setDisableCells(!disableCells);
 			console.log('Graph.js: Running BFS ...');
-			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'reset-board': true}));
+			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'add-bombs': true, 'reset-board': true}));
 			const path = await BFS(nodes, start, end);
-			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'reset-board': false}));
+			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-bombs': false, 'reset-board': false}));
 			console.log('Graph.js: Returned path is:', path);
 			setDisableCells((disableCells) => {
 				return !disableCells;
@@ -111,6 +112,7 @@ function Graph(props) {
 					startAstar();
 					setShowAlert(false);
 				} else {
+					setAlertMessage('Please select a path finding algorithm');
 					setShowAlert(true);
 				}
 			} catch (error) {
@@ -119,38 +121,52 @@ function Graph(props) {
 		}
 	}, [props.run]);
 
+	const genMazeDFS = async () => {
+		if (addedStart && addedEnd) {
+			console.log('Graph.js: Nodes before maze generation [nodes]:', nodes);
+			setDisableCells(!disableCells);
+			const cells = document.getElementsByClassName('cell');
+			for (let i = 0; i < cells.length; i++) {
+				const [row, col] = (cells[i].id).split('-');
+				if (!nodes[row][col].isStart && !nodes[row][col].isEnd && !nodes[row][col].isWall) {
+					cells[i].style.backgroundColor = '';
+					cells[i].classList.remove('animate', 'pop', 'animate1', 'pop1');
+				}
+			}
+			console.log('Graph.js: Generating Maze...');
+			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'add-bombs': true,'reset-board': true}));
+			const walls = await generateMaze(nodes, start, end);
+			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-bombs': false, 'reset-board': false}));
+			console.log('Graph.js: Nodes with walls...', walls);
+			setNodes([...walls]);
+			setDisableCells((disableCells) => {
+				return !disableCells;
+			});
+		} else {
+			console.log('Graph.js: Start or End isn\'t added yet');
+		}
+	};
+
+	const genMazeMST = async () => {
+		console.log('Graph.js: Running MST ...');
+	}
+
 	// Hook that runs when Generate Maze is clicked
 	useEffect(() => {
 		console.log('Graph.js: props.generate:', props.generate);
-		const genMaze = async () => {
-			if (addedStart && addedEnd) {
-				console.log('Graph.js: Nodes before maze generation [nodes]:', nodes);
-				setDisableCells(!disableCells);
-				const cells = document.getElementsByClassName('cell');
-				for (let i = 0; i < cells.length; i++) {
-					const [row, col] = (cells[i].id).split('-');
-					if (!nodes[row][col].isStart && !nodes[row][col].isEnd && !nodes[row][col].isWall) {
-						cells[i].style.backgroundColor = '';
-						cells[i].classList.remove('animate', 'pop', 'animate1', 'pop1');
-					}
+		if (!justMounted) {
+			try {
+				if (props.mazeAlgo === 'Randomized DFS') {
+					genMazeDFS();
+				} else if (props.mazeAlgo === 'MST') {
+					genMazeMST();
+				} else {
+					setAlertMessage('Please select a maze generation algorithm');
+					setShowAlert(true);
 				}
-				console.log('Graph.js: Generating Maze...');
-				props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'reset-board': true}));
-				const walls = await generateMaze(nodes, start, end);
-				props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'reset-board': false}));
-				console.log('Graph.js: Nodes with walls...', walls);
-				setNodes([...walls]);
-				setDisableCells((disableCells) => {
-					return !disableCells;
-				});
-			} else {
-				console.log('Graph.js: Start or End isn\'t added yet');
+			} catch (error) {
+				console.error();
 			}
-		};
-		try {
-			genMaze();
-		} catch (error) {
-			console.error();
 		}
 	}, [props.generate])
 
@@ -201,7 +217,7 @@ function Graph(props) {
 			<Alert show={showAlert}
 				   style={{ marginLeft: '25vw', marginRight: '25vw' }}
 				   variant='danger' id='path-finding-error'>
-					Please select a path finding algorithm
+					{alertMessage}
 			</Alert>
             {nodes.map((row, rowIdx) => {
                 let rowId = `row-${rowIdx}`;
