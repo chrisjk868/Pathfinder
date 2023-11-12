@@ -11,8 +11,8 @@ function App() {
 	const [reset, setReset] = useState(false);
 	const [generate, setGenerate] = useState(false);
 	const [btnStates, setButtonStates] = useState(JSON.stringify({'gen-maze': false, 'search-algo': false, 'reset-board': false}));
-	const [mazeAlgo, setMazeAlgo] = useState('Select Maze Generation Algorithm');
-    const [pfAlgo, setPfAlgo] = useState('Select Path Finding Algorithm');
+	const [mazeAlgo, setMazeAlgo] = useState('* Select Maze Generation Algorithm');
+    const [pfAlgo, setPfAlgo] = useState('* Select Path Finding Algorithm');
 
 	useEffect(() => {
 		const resizeObserver = new ResizeObserver((event) => {
