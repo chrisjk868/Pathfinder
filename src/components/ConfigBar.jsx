@@ -1,9 +1,8 @@
-import { Button, Container, Dropdown, ToggleButton } from "react-bootstrap";
-import { FaBomb } from "react-icons/fa"
-import { PiPathBold, PiEraserFill } from "react-icons/pi"
-import { GiMaze } from 'react-icons/gi'
+import { Button, Dropdown, ToggleButton } from "react-bootstrap";
+import { FaBomb } from "react-icons/fa";
+import { GiMaze } from 'react-icons/gi';
 import { TbWall } from "react-icons/tb";
-import { useState } from "react";
+import { PiPathBold, PiEraserFill } from "react-icons/pi";
 import './styles/ConfigBar.css';
 
 function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, toggleStates, handleSelect, handleWallClick, handleBombClick, mazeAlgo, pfAlgo }) {
@@ -20,6 +19,7 @@ function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, toggleState
 
     return (
         <div className="configBar">
+            
             <Dropdown onSelect={handleSelect}>
                 <Dropdown.Toggle variant="secondary">
                     {mazeAlgo}
@@ -61,7 +61,6 @@ function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, toggleState
                     Add Bombs <FaBomb/>
                 </ToggleButton>
             <Button id="reset-board" variant="outline-light" onClick={() => {clearBoard();}} disabled={getBtnState('reset-board')}> Clear Board <PiEraserFill/> </Button>
-
         </div>
     )
 

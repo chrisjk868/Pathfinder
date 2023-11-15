@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Graph from './components/Graph';
 import ConfigBar from './components/ConfigBar';
 import './App.css';
@@ -76,15 +76,17 @@ function App() {
     }
 
 	const handleWallClick = (e) => {
+		let prevStates = JSON.parse(toggleStates);
         e.preventDefault();
-        setToggleStates(JSON.stringify({'add-weak-walls': true,
+        setToggleStates(JSON.stringify({'add-weak-walls': !prevStates['add-weak-walls'],
 						 		   		'add-bombs': false}));
     }
 
     const handleBombClick = (e) => {
+		let prevStates = JSON.parse(toggleStates);
         e.preventDefault();
         setToggleStates(JSON.stringify({'add-weak-walls': false,
-						 				'add-bombs': true}));
+						 				'add-bombs': !prevStates['add-bombs']}));
     }
 
 	return (
@@ -109,6 +111,7 @@ function App() {
 					reset={reset}
 					generate={generate}
 					setBtnStates={setBtnStates}
+					toggleStates={toggleStates}
 					mazeAlgo={mazeAlgo}
 					pfAlgo={pfAlgo}
 				/>

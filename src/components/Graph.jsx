@@ -18,6 +18,8 @@ function computeNodes(ROWS, COLS) {
 										isStart: false,
 										isEnd: false,
 										isWall: false,
+										isWeakWall: false,
+										isBomb: false,
 										backgroundColor: ''
 									 })
 									)
@@ -191,8 +193,17 @@ function Graph(props) {
 				setAddedEnd(true);
 				setEnd(newNodes[y][x]);
 			} else {
-				newNodes[y][x].backgroundColor = '#00008B';
-				newNodes[y][x].isWall = true;
+				let states = JSON.parse(props.toggleStates); 
+				if (states['add-weak-walls']) {
+					newNodes[y][x].backgroundColor = 'brown';
+					newNodes[y][x].isWeakWall = true;
+				} else if (states['add-bombs']) {
+					newNodes[y][x].backgroundColor = 'black';
+					newNodes[y][x].isBomb = true;
+				} else {
+					newNodes[y][x].backgroundColor = '#00008B';
+					newNodes[y][x].isWall = true;
+				}
 			}
 
 		}
@@ -203,8 +214,9 @@ function Graph(props) {
 	const dragToFill = (coords) => {
 		console.log('Graph.js: Drag to fill ran \n', coords);
 		let newNodes = [...nodes];
+		let states = JSON.parse(props.toggleStates); 
 		const {x: x, y: y} = coords;
-		if (isMouseDown) {
+		if (isMouseDown && !states['add-weak-walls'] && !states['add-bombs']) {
 			newNodes[y][x]['backgroundColor'] = '#00008B';
 			newNodes[y][x]['isWall'] = true;
 			console.log('mouse down over:', x, y);
