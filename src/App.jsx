@@ -10,7 +10,16 @@ function App() {
 	const [run, setRun] = useState(false);
 	const [reset, setReset] = useState(false);
 	const [generate, setGenerate] = useState(false);
-	const [btnStates, setButtonStates] = useState(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-weak-walls': false, 'add-bombs': false, 'reset-board': false}));
+
+	const [btnStates, setButtonStates] = useState(JSON.stringify({'gen-maze': false,
+																  'search-algo': false,
+																  'add-weak-walls': false,
+																  'add-bombs': false,
+																  'reset-board': false}));
+
+	const [toggleStates, setToggleStates] = useState(JSON.stringify({'add-weak-walls': false,
+																	 'add-bombs': false}));
+
 	const [mazeAlgo, setMazeAlgo] = useState('* Select Maze Generation Algorithm');
     const [pfAlgo, setPfAlgo] = useState('* Select Path Finding Algorithm');
 
@@ -30,12 +39,16 @@ function App() {
 	const runPfAlgo = () => {
 		console.log('App.js: runPfAlgo()');
 		setRun((run) => !run);
+		setToggleStates(JSON.stringify({'add-weak-walls': false,
+						 		   		'add-bombs': false}));
 		console.log('App.js: Changed props.run');
 	}
 
 	const clearBoard = () => {
 		console.log('App.js: clearBoard()');
 		setReset((reset) => !reset);
+		setToggleStates(JSON.stringify({'add-weak-walls': false,
+						 		   		'add-bombs': false}));
 		console.log('App.js: Changed props.reset');
 	}
 
@@ -62,6 +75,18 @@ function App() {
         }
     }
 
+	const handleWallClick = (e) => {
+        e.preventDefault();
+        setToggleStates(JSON.stringify({'add-weak-walls': true,
+						 		   		'add-bombs': false}));
+    }
+
+    const handleBombClick = (e) => {
+        e.preventDefault();
+        setToggleStates(JSON.stringify({'add-weak-walls': false,
+						 				'add-bombs': true}));
+    }
+
 	return (
 		<div className="App">
 			<ConfigBar
@@ -69,7 +94,10 @@ function App() {
 				clearBoard={clearBoard}
 				generateMaze={generateMaze}
 				btnStates={btnStates}
+				toggleStates={toggleStates}
 				handleSelect={handleSelect}
+				handleWallClick={handleWallClick}
+				handleBombClick={handleBombClick}
 				mazeAlgo={mazeAlgo}
 				pfAlgo={pfAlgo}
 			/>

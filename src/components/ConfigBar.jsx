@@ -6,14 +6,16 @@ import { TbWall } from "react-icons/tb";
 import { useState } from "react";
 import './styles/ConfigBar.css';
 
-function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, handleSelect, mazeAlgo, pfAlgo }) {
+function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, toggleStates, handleSelect, handleWallClick, handleBombClick, mazeAlgo, pfAlgo }) {
 
-    const [bombChecked, setBombChecked] = useState(false);
-    const [wallChecked, setWallChecked] = useState(false);
-
-    const getState = (btn) => {
+    const getBtnState = (btn) => {
         let states = JSON.parse(btnStates);
         return states[btn];
+    }
+
+    const getToggleState = (tgl) => {
+        let states = JSON.parse(toggleStates);
+        return states[tgl];
     }
 
     return (
@@ -27,7 +29,7 @@ function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, handleSelec
                     <Dropdown.Item className='mazeAlgo'>MST</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
-            <Dropdown onSelect={handleSelect}>
+            <Dropdown onSelect={handleSelect}>  
                 <Dropdown.Toggle variant="secondary">
                     {pfAlgo}
                 </Dropdown.Toggle>
@@ -38,11 +40,27 @@ function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, handleSelec
                     <Dropdown.Item className='pathAlgo'>A*</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
-            <Button id="gen-maze" variant="outline-light" onClick={() => {generateMaze();}} disabled={getState('gen-maze')}> Create Maze <GiMaze/> </Button>
-            <Button id="search-algo" variant="outline-light" onClick={() => {runPfAlgo();}} disabled={getState('search-algo')}> Find Path <PiPathBold/> </Button>
-            <ToggleButton id="add-weak-walls" variant="outline-light" type="checkbox" checked={checked} disabled={getState('add-weak-walls')} onClick={(e) => { e.preventDefault(); setWallChecked(!wallChecked); }}> Add Weak Walls <TbWall/> </ToggleButton>
-            <ToggleButton id="add-bomb" variant="outline-light" type="checkbox" checked={checked} disabled={getState('add-bombs')} onClick={(e) => { e.preventDefault(); setBombChecked(!bombChecked); }}> Add Bombs <FaBomb/> </ToggleButton>
-            <Button id="reset-board" variant="outline-light" onClick={() => {clearBoard();}} disabled={getState('reset-board')}> Clear Board <PiEraserFill/> </Button>
+            <Button id="gen-maze" variant="outline-light" onClick={() => {generateMaze();}} disabled={getBtnState('gen-maze')}> Create Maze <GiMaze/> </Button>
+            <Button id="search-algo" variant="outline-light" onClick={() => {runPfAlgo();}} disabled={getBtnState('search-algo')}> Find Path <PiPathBold/> </Button>
+            <ToggleButton
+                id="add-weak-walls"
+                variant="outline-light"
+                type="checkbox"
+                checked={getToggleState('add-weak-walls')}
+                disabled={getBtnState('add-weak-walls')}
+                onClick={handleWallClick}>
+                    Add Weak Walls <TbWall/>
+            </ToggleButton>
+            <ToggleButton
+                id="add-bomb"
+                variant="outline-light"
+                type="checkbox"
+                checked={getToggleState('add-bombs')}
+                disabled={getBtnState('add-bombs')}
+                onClick={handleBombClick}>
+                    Add Bombs <FaBomb/>
+                </ToggleButton>
+            <Button id="reset-board" variant="outline-light" onClick={() => {clearBoard();}} disabled={getBtnState('reset-board')}> Clear Board <PiEraserFill/> </Button>
 
         </div>
     )

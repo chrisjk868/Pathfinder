@@ -6,7 +6,7 @@
     background-color: #414141;
 }
 
-Button {
+.configBar > * {
     height: fit-content;
     margin: 1rem;
 }
