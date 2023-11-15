@@ -216,7 +216,7 @@ function Graph(props) {
 		let newNodes = [...nodes];
 		let states = JSON.parse(props.toggleStates); 
 		const {x: x, y: y} = coords;
-		if (isMouseDown && !states['add-weak-walls'] && !states['add-bombs']) {
+		if (isMouseDown && !states['add-weak-walls'] && !states['add-bombs'] && !nodes[y][x]['isStart'] && !nodes[y][x]['isEnd']) {
 			newNodes[y][x]['backgroundColor'] = '#00008B';
 			newNodes[y][x]['isWall'] = true;
 			console.log('mouse down over:', x, y);
@@ -241,12 +241,15 @@ function Graph(props) {
                                 let cell = (<Cell id={cellId}
 												  row={rowIdx}
                                                   col={colIdx}
+												  key={[colIdx, rowIdx]}
 												  disabled={disableCells}
                                                   handleClick={handleCick}
 												  dragToFill={dragToFill}
                                                   backgroundColor={nodes[rowIdx][colIdx]['backgroundColor']}
 												  addWalls={addedStart && addedEnd}
-                                                  key={[colIdx, rowIdx]}
+												  isWall={nodes[rowIdx][colIdx]['isWall']}
+												  isWeakWall={nodes[rowIdx][colIdx]['isWeakWall']}
+												  isBomb={nodes[rowIdx][colIdx]['isBomb']}
                                             />);
                                 return cell;
                             })

@@ -6,6 +6,31 @@
     background-color: #00008B;
 }
 
+.weakWall {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 30px;
+    display: inline-block;
+    vertical-align: top;
+    border: solid;
+    border-width: thin;
+    color: #00008B;
+}
+
+.bomb {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 30px;
+    display: inline-block;
+    vertical-align: top;
+    border: solid;
+    border-color: grey;
+    border-width: thin;
+    color: black;
+}
+
 .animate.pop {
     animation-name: animate-pop;
     animation-timing-function: cubic-bezier(0.26, 0.53, 0.74, 1.48);
