@@ -67,9 +67,9 @@ function Graph(props) {
 			// Disable all buttons and user interactions when algo is running
 			setDisableCells(!disableCells);
 			console.log('Graph.js: Running BFS ...');
-			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'add-bombs': true, 'reset-board': true}));
+			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'add-weak-walls': true, 'add-bombs': true, 'reset-board': true}));
 			const path = await BFS(nodes, start, end);
-			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-bombs': false, 'reset-board': false}));
+			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-weak-walls': false, 'add-bombs': false, 'reset-board': false}));
 			console.log('Graph.js: Returned path is:', path);
 			setDisableCells((disableCells) => {
 				return !disableCells;
@@ -134,9 +134,9 @@ function Graph(props) {
 				}
 			}
 			console.log('Graph.js: Generating Maze...');
-			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'add-bombs': true,'reset-board': true}));
+			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'add-weak-walls': true, 'add-bombs': true,'reset-board': true}));
 			const walls = await generateMaze(nodes, start, end);
-			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-bombs': false, 'reset-board': false}));
+			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-weak-walls': false, 'add-bombs': false, 'reset-board': false}));
 			console.log('Graph.js: Nodes with walls...', walls);
 			setNodes([...walls]);
 			setDisableCells((disableCells) => {
