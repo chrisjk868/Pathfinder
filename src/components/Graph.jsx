@@ -1,9 +1,10 @@
 import React, { useRef, useEffect, useState } from 'react';
-import './styles/Graph.css';
+import { Alert } from 'react-bootstrap';
 import Cell from './Cell';
 import BFS from '../utils/BFS.js';
 import generateMaze from '../utils/DFSMaze.js';
-import { Alert } from 'react-bootstrap';
+import './styles/Graph.css';
+
 
 function computeNodes(ROWS, COLS) {
     return (
@@ -160,8 +161,10 @@ function Graph(props) {
 			try {
 				if (props.mazeAlgo === 'Randomized DFS') {
 					genMazeDFS();
+					setShowAlert(false);
 				} else if (props.mazeAlgo === 'MST') {
 					genMazeMST();
+					setShowAlert(false);
 				} else {
 					setAlertMessage('Please select a maze generation algorithm');
 					setShowAlert(true);
@@ -177,38 +180,46 @@ function Graph(props) {
     // Recieving data from child cell
     const handleCick = (coords) => {
 		let newNodes = [...nodes];
+		let tglStates = JSON.parse(props.toggleStates);
 		const {x: x, y: y} = coords;
+
         console.log('Graph.js: Clicked coordinates from graph \n', coords);
-
-
-		if (!newNodes[y][x].isStart && !newNodes[y][x].isEnd) {
-			if (!addedStart) {
-				newNodes[y][x].backgroundColor = 'green';
-				newNodes[y][x].isStart = true;
-				setAddedStart(true);
-				setStart(newNodes[y][x]);
-			} else if (!addedEnd) {
-				newNodes[y][x].backgroundColor = 'red';
-				newNodes[y][x].isEnd = true;
-				setAddedEnd(true);
-				setEnd(newNodes[y][x]);
+		
+		if (tglStates['add-weak-walls'] || tglStates['add-bombs']) {
+			if (!addedStart || !addedEnd) {
+				setShowAlert(true);
+				setAlertMessage('Please add a start and end point');
 			} else {
-				let states = JSON.parse(props.toggleStates); 
-				if (states['add-weak-walls']) {
-					newNodes[y][x].backgroundColor = 'brown';
+				if (tglStates['add-weak-walls']) {
 					newNodes[y][x].isWeakWall = true;
-				} else if (states['add-bombs']) {
-					newNodes[y][x].backgroundColor = 'black';
+				} else if (tglStates['add-bombs']) {
 					newNodes[y][x].isBomb = true;
+				}
+			}
+		} else {
+			if (!newNodes[y][x].isStart && !newNodes[y][x].isEnd) {
+				if (!addedStart) {
+					newNodes[y][x].backgroundColor = 'green';
+					newNodes[y][x].isStart = true;
+					setAddedStart(true);
+					setStart(newNodes[y][x]);
+				} else if (!addedEnd) {
+					newNodes[y][x].backgroundColor = 'red';
+					newNodes[y][x].isEnd = true;
+					setAddedEnd(true);
+					setEnd(newNodes[y][x]);
+					if (showAlert) {
+						setShowAlert(false);
+					}
 				} else {
 					newNodes[y][x].backgroundColor = '#00008B';
 					newNodes[y][x].isWall = true;
 				}
 			}
-
 		}
 
-        setNodes(newNodes);
+		setNodes(newNodes);
+
     }
 
 	const dragToFill = (coords) => {
@@ -247,6 +258,8 @@ function Graph(props) {
 												  dragToFill={dragToFill}
                                                   backgroundColor={nodes[rowIdx][colIdx]['backgroundColor']}
 												  addWalls={addedStart && addedEnd}
+												  isStart={nodes[rowIdx][colIdx]['isStart']}
+												  isEnd={nodes[rowIdx][colIdx]['isEnd']}
 												  isWall={nodes[rowIdx][colIdx]['isWall']}
 												  isWeakWall={nodes[rowIdx][colIdx]['isWeakWall']}
 												  isBomb={nodes[rowIdx][colIdx]['isBomb']}

@@ -78,12 +78,10 @@ async function BFS(grid, start, end, animate=true) {
             let path = [];
             let curr = end;
             while (curr !== null) {
-                if (!grid[curr[0]][curr[1]].isEnd && !grid[curr[0]][curr[1]].isStart) {
-                    if (animate) {
-                        let cell = document.getElementById(`${curr[0]}-${curr[1]}`);
-                        cell.style.backgroundColor = 'yellow';
-                        cell.classList.add('animate1', 'pop1');
-                    }
+                if (animate) {
+                    let cell = document.getElementById(`${curr[0]}-${curr[1]}`);
+                    cell.style.backgroundColor = 'yellow';
+                    cell.classList.add('animate1', 'pop1');
                 }
                 path.push(curr);
                 curr = adjacency[curr] // Visit Parent from Child

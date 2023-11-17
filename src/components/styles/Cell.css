@@ -26,9 +26,35 @@
     display: inline-block;
     vertical-align: top;
     border: solid;
-    border-color: grey;
     border-width: thin;
+    border-color: grey;
     color: black;
+}
+
+.start {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 30px;
+    display: inline-block;
+    vertical-align: top;
+    border: solid;
+    border-width: thin;
+    border-color: grey;
+    color: green;
+}
+
+.end {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 30px;
+    display: inline-block;
+    vertical-align: top;
+    border: solid;
+    border-width: thin;
+    border-color: grey;
+    color: red;
 }
 
 .animate.pop {

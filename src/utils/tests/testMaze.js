@@ -19,7 +19,7 @@ function genGrid(start, end, rows, cols) {
                 curNode.isEnd = true;
                 curNode.backgroundColor = 'red';
             }
-            curRow.push(curNode);
+            curRow.push(curNode); 
         }
         grid.push(curRow);
     }
