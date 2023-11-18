@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { TbWall } from "react-icons/tb";
-import { GiBrokenWall, GiBrickWall } from "react-icons/gi";
 import { FaBomb } from "react-icons/fa";
 import { MdOutlineTripOrigin } from "react-icons/md";
 import { FaLocationCrosshairs } from "react-icons/fa6";
@@ -38,8 +37,7 @@ function Cell(props) {
     return (
         <>
             {props.isWeakWall ?
-                // <TbWall className='weakWall' id={`${props.id}`} viewBox='4 4 16 16'/>
-                <GiBrokenWall className='weakWall'/>
+                <TbWall className='weakWall' id={`${props.id}`} viewBox='4 4 16 16'/>
              : (props.isBomb ?
                     <FaBomb className='bomb' id={`${props.id}`}/>
                 : (props.isStart ?
