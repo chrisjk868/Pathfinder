@@ -42,20 +42,20 @@ function Cell(props) {
                     <FaBomb className='bomb' id={`${props.id}`}/>
                 : (props.isStart ?
                         <MdOutlineTripOrigin className='start' id={`${props.id}`}/>
-                        : (props.isEnd ?
-                            <FaLocationCrosshairs className='end' id={`${props.id}`}/>
-                            :
-                                (<div className='cell'
-                                    id={`${props.id}`}
-                                    style={style}
-                                    onClick={!props.disabled ? () => {
-                                        props.handleClick(getCoords()); // Sending data back to graph when a cell is clicked
-                                    } : () => {}}
-                                    onMouseEnter={(props.addWalls && !props.disabled) ? () => {
-                                        props.dragToFill(getCoords());
-                                    } : () => {}}>
-                                </div>)
-                          )
+                    : (props.isEnd ?
+                        <FaLocationCrosshairs className='end' id={`${props.id}`}/>
+                        :
+                            (<div className='cell'
+                                id={`${props.id}`}
+                                style={style}
+                                onClick={!props.disabled ? () => {
+                                    props.handleClick(getCoords()); // Sending data back to graph when a cell is clicked
+                                } : () => {}}
+                                onMouseEnter={(props.addWalls && !props.disabled) ? () => {
+                                    props.dragToFill(getCoords());
+                                } : () => {}}>
+                            </div>)
+                        )
                   )
                 )
             }
