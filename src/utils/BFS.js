@@ -23,7 +23,7 @@ async function BFS(grid, start, end, animate=true) {
     frontier.enqueue(start);
     adjacency[[start.y, start.x]] = null;
     visited.add(JSON.stringify(start))
-    while (!frontier.isEmpty()) {
+    while (!frontier.isEmpty() && !reachable) {
         // Process the current node
         let currNode = frontier.dequeue(); // currNode: Parent
         // console.log('\n==================================================================');
@@ -32,10 +32,12 @@ async function BFS(grid, start, end, animate=true) {
         // console.log('BFS.js: Frontier:', frontier);
         // console.log(frontier.isEmpty());
 
-        if (reachable) {
-            // console.log('BFS.js: End node reached:', currNode);
-            break;
+        if (animate) {
+            let cell = document.getElementById(`${currNode.y}-${currNode.x}`);
+            cell.style.backgroundColor = 'cyan';
+            cell.classList.add('animate', 'pop');
         }
+
         // Check the next candidates to visit
         neiEnums.forEach((deltas, _index) => {
             const {y: deltaY, x: deltaX} = deltas;
@@ -56,13 +58,6 @@ async function BFS(grid, start, end, animate=true) {
                     if (newNode.isEnd) {
                         // console.log('BFS.js: End node reached:', currNode);
                         reachable = true;
-                        // break;
-                    } else {
-                        if (animate) {
-                            let cell = document.getElementById(`${newNode.y}-${newNode.x}`);
-                            cell.style.backgroundColor = 'cyan';
-                            cell.classList.add('animate', 'pop');
-                        }
                     }
                 }
             }
