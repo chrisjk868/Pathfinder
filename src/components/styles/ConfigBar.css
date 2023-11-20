@@ -3,6 +3,10 @@
     padding: 0;
 }
 
+.toggleBtn {
+    align-items: center;
+}
+
 .configBar {
     display: flex;
     justify-content: center;

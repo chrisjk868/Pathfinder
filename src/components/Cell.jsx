@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { TbWall } from "react-icons/tb";
 import { FaBomb } from "react-icons/fa";
 import { MdOutlineTripOrigin } from "react-icons/md";
-import { FaLocationCrosshairs } from "react-icons/fa6";
+import { FaLocationCrosshairs, Fa1, Fa2, Fa3, Fa4, Fa5, Fa6 } from "react-icons/fa6";
 import './styles/Cell.css';
 
 function Cell(props) {
@@ -37,7 +37,10 @@ function Cell(props) {
     return (
         <>
             {props.isWeakWall ?
-                <TbWall className='weakWall' id={`${props.id}`} viewBox='4 4 16 16'/>
+                <div className='weakWall'>
+                    <TbWall className='weakWalls' id={`${props.id}`} viewBox='4 4 16 16'/>
+                    <Fa1 className='wallStrength'/>
+                </div>
              : (props.isBomb ?
                     <FaBomb className='bomb' id={`${props.id}`}/>
                 : (props.isStart ?

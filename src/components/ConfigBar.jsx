@@ -2,7 +2,6 @@ import { Button, Container, Dropdown, ToggleButton } from "react-bootstrap";
 import { FaBomb } from "react-icons/fa";
 import { GiMaze } from 'react-icons/gi';
 import { TbWall } from "react-icons/tb";
-import { GiBrokenWall } from "react-icons/gi";
 import { PiPathBold, PiEraserFill } from "react-icons/pi";
 import './styles/ConfigBar.css';
 
@@ -45,15 +44,17 @@ function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, toggleState
                 <Button id="search-algo" variant="outline-light" onClick={() => {runPfAlgo();}} disabled={getBtnState('search-algo')}> Find Path <PiPathBold/> </Button>
                 <ToggleButton
                     id="add-weak-walls"
+                    className="toggleBtn"
                     variant="outline-light"
                     type="checkbox"
                     checked={getToggleState('add-weak-walls')}
                     disabled={getBtnState('add-weak-walls')}
                     onClick={handleWallClick}>
-                        Add Weak Walls <GiBrokenWall/>
+                        Add Weak Walls <TbWall/>
                 </ToggleButton>
                 <ToggleButton
                     id="add-bomb"
+                    className="toggleBtn"
                     variant="outline-light"
                     type="checkbox"
                     checked={getToggleState('add-bombs')}
