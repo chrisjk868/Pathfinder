@@ -13,7 +13,6 @@ function App() {
 
 	const [btnStates, setButtonStates] = useState(JSON.stringify({'gen-maze': false,
 																  'search-algo': false,
-																  'add-weak-walls': false,
 																  'add-bombs': false,
 																  'reset-board': false}));
 
@@ -75,18 +74,10 @@ function App() {
         }
     }
 
-	const handleWallClick = (e) => {
-		let prevStates = JSON.parse(toggleStates);
-        e.preventDefault();
-        setToggleStates(JSON.stringify({'add-weak-walls': !prevStates['add-weak-walls'],
-						 		   		'add-bombs': false}));
-    }
-
     const handleBombClick = (e) => {
 		let prevStates = JSON.parse(toggleStates);
         e.preventDefault();
-        setToggleStates(JSON.stringify({'add-weak-walls': false,
-						 				'add-bombs': !prevStates['add-bombs']}));
+        setToggleStates(JSON.stringify({'add-bombs': !prevStates['add-bombs']}));
     }
 
 	return (
@@ -98,7 +89,6 @@ function App() {
 				btnStates={btnStates}
 				toggleStates={toggleStates}
 				handleSelect={handleSelect}
-				handleWallClick={handleWallClick}
 				handleBombClick={handleBombClick}
 				mazeAlgo={mazeAlgo}
 				pfAlgo={pfAlgo}

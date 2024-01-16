@@ -70,9 +70,9 @@ function Graph(props) {
 			// Disable all buttons and user interactions when algo is running
 			setDisableCells(!disableCells);
 			console.log('Graph.js: Running BFS ...');
-			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'add-weak-walls': true, 'add-bombs': true, 'reset-board': true}));
+			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'add-bombs': true, 'reset-board': true}));
 			const path = await BFS(nodes, start, end);
-			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-weak-walls': false, 'add-bombs': false, 'reset-board': false}));
+			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-bombs': false, 'reset-board': false}));
 			console.log('Graph.js: Returned path is:', path);
 			setDisableCells((disableCells) => {
 				return !disableCells;
@@ -137,9 +137,9 @@ function Graph(props) {
 				}
 			}
 			console.log('Graph.js: Generating Maze...');
-			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'add-weak-walls': true, 'add-bombs': true,'reset-board': true}));
+			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'add-bombs': true,'reset-board': true}));
 			const walls = await generateMaze(nodes, start, end);
-			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-weak-walls': false, 'add-bombs': false, 'reset-board': false}));
+			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-bombs': false, 'reset-board': false}));
 			console.log('Graph.js: Nodes with walls...', walls);
 			setNodes([...walls]);
 			setDisableCells((disableCells) => {
@@ -185,14 +185,12 @@ function Graph(props) {
 
         console.log('Graph.js: Clicked coordinates from graph \n', coords);
 		
-		if (tglStates['add-weak-walls'] || tglStates['add-bombs']) {
+		if (tglStates['add-bombs']) {
 			if (!addedStart || !addedEnd) {
 				setShowAlert(true);
 				setAlertMessage('Please add a start and end point');
 			} else {
-				if (tglStates['add-weak-walls']) {
-					newNodes[y][x].isWeakWall = true;
-				} else if (tglStates['add-bombs']) {
+				if (tglStates['add-bombs']) {
 					newNodes[y][x].isBomb = true;
 				}
 			}
@@ -227,7 +225,7 @@ function Graph(props) {
 		let newNodes = [...nodes];
 		let states = JSON.parse(props.toggleStates); 
 		const {x: x, y: y} = coords;
-		if (isMouseDown && !states['add-weak-walls'] && !states['add-bombs'] && !nodes[y][x]['isStart'] && !nodes[y][x]['isEnd']) {
+		if (isMouseDown && !states['add-bombs'] && !nodes[y][x]['isStart'] && !nodes[y][x]['isEnd']) {
 			newNodes[y][x]['backgroundColor'] = '#00008B';
 			newNodes[y][x]['isWall'] = true;
 			console.log('mouse down over:', x, y);

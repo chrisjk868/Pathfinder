@@ -5,7 +5,7 @@ import { TbWall } from "react-icons/tb";
 import { PiPathBold, PiEraserFill } from "react-icons/pi";
 import './styles/ConfigBar.css';
 
-function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, toggleStates, handleSelect, handleWallClick, handleBombClick, mazeAlgo, pfAlgo }) {
+function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, toggleStates, handleSelect, handleBombClick, mazeAlgo, pfAlgo }) {
 
     const getBtnState = (btn) => {
         let states = JSON.parse(btnStates);
@@ -42,7 +42,7 @@ function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, toggleState
                 </Dropdown>
                 <Button id="gen-maze" variant="outline-light" onClick={() => {generateMaze();}} disabled={getBtnState('gen-maze')}> Create Maze <GiMaze/> </Button>
                 <Button id="search-algo" variant="outline-light" onClick={() => {runPfAlgo();}} disabled={getBtnState('search-algo')}> Find Path <PiPathBold/> </Button>
-                <ToggleButton
+                {/* <ToggleButton
                     id="add-weak-walls"
                     className="toggleBtn"
                     variant="outline-light"
@@ -51,7 +51,7 @@ function ConfigBar({ runPfAlgo, clearBoard, generateMaze, btnStates, toggleState
                     disabled={getBtnState('add-weak-walls')}
                     onClick={handleWallClick}>
                         Add Weak Walls <TbWall/>
-                </ToggleButton>
+                </ToggleButton> */}
                 <ToggleButton
                     id="add-bomb"
                     className="toggleBtn"
