@@ -35,10 +35,11 @@ function getWalls(currNode, ROWS, COLS) {
     nonBarrierNodes = shuffle(nonBarrierNodes);
     nonBarrierNodes.forEach((node, _index) => {
         // Create a path from current node to the next available node by removing barrier between them
-        // Given that the barrier node to be removed is not an End point
+        // Given that the barrier node to be removed is not an end point and not out of bounds
         const [pathToNode, delta] = node;
         const [newDeltaY, newDeltaX] = [-1 * Math.trunc(delta.y / 2), -1 * Math.trunc(delta.x / 2)];
         const [bnodeY, bnodeX] = [pathToNode[0] + newDeltaY, pathToNode[1] + newDeltaX];
+        console.log(board[bnodeY][bnodeX])
         if (!visitedWalls.has(JSON.stringify(pathToNode)) && !board[bnodeY][bnodeX].isEnd) {
             board[bnodeY][bnodeX]['backgroundColor'] = '';
             board[bnodeY][bnodeX]['isWall'] = false;
@@ -184,9 +185,6 @@ async function generateMaze(grid, start, end) {
     // Randomized DFS for generating a maze
     visitedWalls.clear();
     getWalls([startY, startX], ROWS, COLS);
-
-    // Ensure that a path exists from the start point to the end point for the generated maze
-    pathExists(board, [startY, startX], [endY, endX]);
 
     // Get all wall segments
     const wallSegments = getIslands(ROWS, COLS);

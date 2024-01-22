@@ -3,6 +3,7 @@ import { Alert } from 'react-bootstrap';
 import Cell from './Cell';
 import BFS from '../utils/BFS.js';
 import generateMaze from '../utils/DFSMaze.js';
+import mstMaze from '../utils/MSTMaze.js';
 import './styles/Graph.css';
 
 
@@ -151,7 +152,31 @@ function Graph(props) {
 	};
 
 	const genMazeMST = async () => {
-		console.log('Graph.js: Running MST ...');
+
+		if (addedStart && addedEnd) {
+			console.log('Graph.js: Nodes before maze generation [nodes]:', nodes);
+			setDisableCells(!disableCells);
+			const cells = document.getElementsByClassName('cell');
+			for (let i = 0; i < cells.length; i++) {
+				const [row, col] = (cells[i].id).split('-');
+				if (!nodes[row][col].isStart && !nodes[row][col].isEnd && !nodes[row][col].isWall) {
+					cells[i].style.backgroundColor = '';
+					cells[i].classList.remove('animate', 'pop', 'animate1', 'pop1');
+				}
+			}
+			console.log('Graph.js: Generating Maze...');
+			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'add-bombs': true,'reset-board': true}));
+			const walls = await mstMaze(nodes, start, end);
+			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-bombs': false, 'reset-board': false}));
+			console.log('Graph.js: Nodes with walls...', walls);
+			setNodes([...walls]);
+			setDisableCells((disableCells) => {
+				return !disableCells;
+			});
+		} else {
+			console.log('Graph.js: Start or End isn\'t added yet');
+		}
+		
 	}
 
 	// Hook that runs when Generate Maze is clicked
