@@ -1,4 +1,53 @@
-let board = null
+import { forEach } from "lodash";
+
+let board = null;
+let [ROWS, COLS] = [null, null];
+
+function shuffle(array) {
+    array.sort(() => Math.random() - 0.5);
+    return array
+}
+
+function kruskalsAlgo(walls) {
+
+    let emptyCellSets = {}
+    
+    // First get all empty cells and create a set for each empty cell
+    for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+            if (!board[r][c]['isWall']) {
+                emptyCellSets[[r, c]] = new Set([[r, c]]);
+            }
+        }
+    }
+
+    // DEBUG: All cells that are empty and available
+    // Get their adjacent cells also (from left to right) or (from up to down)
+    console.log(emptyCellSets);
+
+    const neiEnums = [{y: 1, x: 0}, {y: -1, x: 0}, {y: 0, x: -1}, {y: 0, x: 1}];
+
+    // Kruskal's Algorithm
+    // We know that the coordinate of each wall represents a passage
+    let randomSequencedWalls = shuffle(walls);
+    randomSequencedWalls.forEach((cell, _index) => {
+        let [cellRow, cellCol] = [cell['y'], cell['x']];
+        // Get adjacent cells
+        neiEnums.forEach((deltas, _index) => {
+            const {y: deltaY, x: deltaX} = deltas;
+            const newCoords = {y: cellRow + deltaY, x: cellCol + deltaX};
+            if (0 <= newCoords.y && newCoords.y < ROWS && 0 <= newCoords.x && newCoords.x < COLS && !board[newCoords.y][newCoords.x]['isWall']) {
+                // If the cells divided by current wall belong to distinct sets
+                // 1. Remove the current wall
+                // 2. Join the set of the formerly divided walls
+                board[cellRow][cellCol]['backgroundColor'] = '';
+                board[cellRow][cellCol]['isWall'] = false;
+
+            }
+        })
+    });
+}
+
 
 async function mstMaze(grid, start, end) {
 
@@ -8,10 +57,12 @@ async function mstMaze(grid, start, end) {
     if (!start || !end) {
         return;
     }
-    const [ROWS, COLS] = [grid.length, grid[0].length]
+    [ROWS, COLS] = [grid.length, grid[0].length]
     const {x: startX, y: startY} = start;
     const {x: endX, y: endY} = end;
+    let walls = []
     board = [...grid];
+    
 
     // Generate barriers to remove for randomized DFS
     for (let row = 0; row < ROWS; row++) {
@@ -19,19 +70,23 @@ async function mstMaze(grid, start, end) {
             if (startX % 2 === 0) {
                 if (col % 2 === 1 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
                     board[row][col]['isWall'] = true;
+                    walls.push(board[row][col]);
                 }
             } else {
                 if (col % 2 === 0 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
                     board[row][col]['isWall'] = true;
+                    walls.push(board[row][col]);
                 }
             }
             if (startY % 2 === 0) {
                 if (row % 2 === 1 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
                     board[row][col]['isWall'] = true;
+                    walls.push(board[row][col]);
                 }
             } else {
                 if (row % 2 === 0 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
                     board[row][col]['isWall'] = true;
+                    walls.push(board[row][col]);
                 }
             }
         }
@@ -47,6 +102,8 @@ async function mstMaze(grid, start, end) {
 
         }
     }
+
+    // let barriers = kruskalsAlgo(walls);
 
     return board;
 }
