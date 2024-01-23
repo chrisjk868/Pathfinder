@@ -1,5 +1,3 @@
-import { forEach } from "lodash";
-
 let board = null;
 let [ROWS, COLS] = [null, null];
 
