@@ -25,6 +25,7 @@ function kruskalsAlgo(walls) {
 
     const neiEnums = [{y: 1, x: 0}, {y: -1, x: 0}, {y: 0, x: -1}, {y: 0, x: 1}];
 
+    // Need to use disjoint sets here. 
     // Kruskal's Algorithm
     // We know that the coordinate of each wall represents a passage
     let randomSequencedWalls = shuffle(walls);
@@ -35,7 +36,7 @@ function kruskalsAlgo(walls) {
             const {y: deltaY, x: deltaX} = deltas;
             const newCoords = {y: cellRow + deltaY, x: cellCol + deltaX};
             if (0 <= newCoords.y && newCoords.y < ROWS && 0 <= newCoords.x && newCoords.x < COLS && !board[newCoords.y][newCoords.x]['isWall']) {
-                // If the cells divided by current wall belong to distinct sets
+                // If the cells divided by current wall belong to distinct sets 
                 // 1. Remove the current wall
                 // 2. Join the set of the formerly divided walls
                 board[cellRow][cellCol]['backgroundColor'] = '';
