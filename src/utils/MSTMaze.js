@@ -10,7 +10,7 @@ function kruskalsAlgo(walls) {
 
     let emptyCellSets = {}
     
-    // First get all empty cells and create a set for each empty cell
+    // First get all empty cells and create a set for each empty cells
     for (let r = 0; r < ROWS; r++) {
         for (let c = 0; c < COLS; c++) {
             if (!board[r][c]['isWall']) {
@@ -56,7 +56,7 @@ async function mstMaze(grid, start, end) {
     if (!start || !end) {
         return;
     }
-    [ROWS, COLS] = [grid.length, grid[0].length]
+    const [ROWS, COLS] = [grid.length, grid[0].length]
     const {x: startX, y: startY} = start;
     const {x: endX, y: endY} = end;
     let walls = []
@@ -102,7 +102,29 @@ async function mstMaze(grid, start, end) {
         }
     }
 
-    let barriers = kruskalsAlgo(walls);
+    let connectionWalls = [];
+    // Get specific walls that allow connections between empty cells;
+    for (let i = 0; i < walls.length; i++) {
+        // Check top bottom and left right
+        let currRow = walls[i]['y'];
+        let currCol = walls[i]['x'];
+        if (0 <= currRow - 1 && currRow < ROWS) {
+            if (grid[currRow - 1][currCol]['isWall'] || grid[currRow + 1][currCol]['isWall']) {
+                // connectionWalls.push(walls[i]);
+                let cell = document.getElementById(`${currRow}-${currCol}`);
+                cell.style.backgroundColor = 'green';
+            }
+        } else if (0 <= currCol - 1 && currCol < COLS) {
+            if (grid[currRow][currCol - 1]['isWall'] || grid[currRow][currCol + 1]['isWall']) {
+                let cell = document.getElementById(`${currRow}-${currCol}`);
+                cell.style.backgroundColor = 'green';
+            }
+        }
+    }
+
+    
+
+    // let barriers = kruskalsAlgo(walls);
 
     return board;
 }

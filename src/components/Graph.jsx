@@ -20,7 +20,6 @@ function computeNodes(ROWS, COLS) {
 										isStart: false,
 										isEnd: false,
 										isWall: false,
-										isWeakWall: false,
 										isBomb: false,
 										backgroundColor: ''
 									 })
@@ -284,7 +283,6 @@ function Graph(props) {
 												  isStart={nodes[rowIdx][colIdx]['isStart']}
 												  isEnd={nodes[rowIdx][colIdx]['isEnd']}
 												  isWall={nodes[rowIdx][colIdx]['isWall']}
-												  isWeakWall={nodes[rowIdx][colIdx]['isWeakWall']}
 												  isBomb={nodes[rowIdx][colIdx]['isBomb']}
                                             />);
                                 return cell;
