@@ -122,7 +122,7 @@ async function mstMaze(grid, start, end) {
         }
     }
 
-    
+    // Marking walls green and seeing if its correct
 
     // let barriers = kruskalsAlgo(walls);
 
