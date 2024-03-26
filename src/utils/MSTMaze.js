@@ -102,7 +102,7 @@ async function mstMaze(grid, start, end) {
         }
     }
 
-    // let barriers = kruskalsAlgo(walls);
+    let barriers = kruskalsAlgo(walls);
 
     return board;
 }
