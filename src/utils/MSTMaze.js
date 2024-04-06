@@ -63,29 +63,26 @@ async function mstMaze(grid, start, end) {
     board = [...grid];
     
 
-    // Generate barriers to remove for randomized DFS
+    // Generate barriers to remove for randomized Kruskal's
     for (let row = 0; row < ROWS; row++) {
         for (let col = 0; col < COLS; col++) {
             if (startX % 2 === 0) {
                 if (col % 2 === 1 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
                     board[row][col]['isWall'] = true;
-                    walls.push(board[row][col]);
+                    
                 }
             } else {
                 if (col % 2 === 0 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
                     board[row][col]['isWall'] = true;
-                    walls.push(board[row][col]);
                 }
             }
             if (startY % 2 === 0) {
                 if (row % 2 === 1 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
                     board[row][col]['isWall'] = true;
-                    walls.push(board[row][col]);
                 }
             } else {
                 if (row % 2 === 0 && (!board[row][col]['isStart'] && !board[row][col]['isEnd'])) {
                     board[row][col]['isWall'] = true;
-                    walls.push(board[row][col]);
                 }
             }
         }
@@ -95,36 +92,36 @@ async function mstMaze(grid, start, end) {
         for (let j = 0; j < board[i].length; j++) {
             if (board[i][j].isWall) {
                 let cell = document.getElementById(`${i}-${j}`);
-                cell.style.backgroundColor = '#00008B';
+                // cell.style.backgroundColor = '#00008B';
                 cell.classList.add('animate', 'pop');
+                board[i][j]['backgroundColor'] = '#00008B';
+                walls.push(board[i][j]);
             }
 
         }
     }
 
     let connectionWalls = [];
+    let pos = [[1, 0], [-1, 0], [0, -1], [0, 1]] // Position enums Up, down, left, right
     // Get specific walls that allow connections between empty cells;
     for (let i = 0; i < walls.length; i++) {
         // Check top bottom and left right
         let currRow = walls[i]['y'];
         let currCol = walls[i]['x'];
-        if (1 <= currRow - 1 && currRow < ROWS - 1) {
-            if (grid[currRow - 1][currCol]['isWall'] || grid[currRow + 1][currCol]['isWall']) {
-                // connectionWalls.push(walls[i]);
-                let cell = document.getElementById(`${currRow}-${currCol}`);
-                cell.style.backgroundColor = 'green';
-            }
-        } else if (1 <= currCol - 1 && currCol < COLS - 1) {
-            if (grid[currRow][currCol - 1]['isWall'] || grid[currRow][currCol + 1]['isWall']) {
-                let cell = document.getElementById(`${currRow}-${currCol}`);
-                cell.style.backgroundColor = 'green';
+        for (let j = 0; j < pos.length; j++) {
+            // Check that the positions which we are looking at are within bounds
+            let [dR, dC] = pos[j];
+            let [newR, newC] = [currRow + dR, currCol + dC];
+            if (newR > 0 && newR < ROWS && newC > 0 && newC < COLS) {
+                if (!board[newR][newC]['isWall']) {
+                    board[currRow][currCol]['backgroundColor'] = 'green';
+                } 
             }
         }
     }
 
-    // Marking walls green and seeing if its correct
-
-    // let barriers = kruskalsAlgo(walls);
+    // Run kruskal's for maze generation
+    let barriers = kruskalsAlgo(walls);
 
     return board;
 }
