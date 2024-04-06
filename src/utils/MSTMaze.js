@@ -108,13 +108,13 @@ async function mstMaze(grid, start, end) {
         // Check top bottom and left right
         let currRow = walls[i]['y'];
         let currCol = walls[i]['x'];
-        if (0 <= currRow - 1 && currRow < ROWS) {
+        if (1 <= currRow - 1 && currRow < ROWS - 1) {
             if (grid[currRow - 1][currCol]['isWall'] || grid[currRow + 1][currCol]['isWall']) {
                 // connectionWalls.push(walls[i]);
                 let cell = document.getElementById(`${currRow}-${currCol}`);
                 cell.style.backgroundColor = 'green';
             }
-        } else if (0 <= currCol - 1 && currCol < COLS) {
+        } else if (1 <= currCol - 1 && currCol < COLS - 1) {
             if (grid[currRow][currCol - 1]['isWall'] || grid[currRow][currCol + 1]['isWall']) {
                 let cell = document.getElementById(`${currRow}-${currCol}`);
                 cell.style.backgroundColor = 'green';
