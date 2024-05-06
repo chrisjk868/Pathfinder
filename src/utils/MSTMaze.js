@@ -1,3 +1,5 @@
+import UnionFind from "./UnionFind";
+
 let board = null;
 let [ROWS, COLS] = [null, null];
 
@@ -6,7 +8,7 @@ function shuffle(array) {
     return array
 }
 
-function kruskalsAlgo(walls) {
+function kruskalsAlgo(walls, disjoint) {
 
     let emptyCellSets = {}
     
@@ -121,7 +123,8 @@ async function mstMaze(grid, start, end) {
     }
 
     // Run kruskal's for maze generation
-    let barriers = kruskalsAlgo(walls);
+    let disjoint = new UnionFind(ROWS, COLS);
+    let barriers = kruskalsAlgo(walls, disjoint);
 
     return board;
 }
