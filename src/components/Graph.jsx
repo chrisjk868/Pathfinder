@@ -98,6 +98,7 @@ function Graph(props) {
 		}
 	}
 
+	// Hook that runs when the run button is clicked and an algorithm is used to find a path
 	useEffect(() => {
 		console.log('Graph.js, props.run:', `props.run: ${props.run} | props.reset: ${props.reset}`);
 		if (!justMounted) {
