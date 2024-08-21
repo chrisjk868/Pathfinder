@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Alert } from 'react-bootstrap';
 import Cell from './Cell';
 import BFS from '../utils/BFS.js';
+import DFS from '../utils/DFS.js';
 import generateMaze from '../utils/DFSMaze.js';
 import mstMaze from '../utils/MSTMaze.js';
 import './styles/Graph.css';
@@ -82,7 +83,15 @@ function Graph(props) {
 
 	const startDFS = async () => {
 		if (addedStart && addedEnd) {
+			setDisableCells(!disableCells);
 			console.log('Graph.js: Running DFS ...')
+			props.setBtnStates(JSON.stringify({'gen-maze': true, 'search-algo': true, 'add-bombs': true, 'reset-board': true}));
+			const path = await DFS(nodes, start, end);
+			props.setBtnStates(JSON.stringify({'gen-maze': false, 'search-algo': false, 'add-bombs': false, 'reset-board': false}));
+			console.log('Graph.js: Returned path is:', path);
+			setDisableCells((disableCells) => {
+				return !disableCells;
+			});
 		}
 	}
 
