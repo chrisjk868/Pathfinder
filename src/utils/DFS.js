@@ -3,7 +3,7 @@ import Stack from "./Stack.js";
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
- }
+}
 
 async function DFS(grid, start, end, animate=true) {
 
@@ -15,29 +15,22 @@ async function DFS(grid, start, end, animate=true) {
     }
     const [ROWS, COLS] = [grid.length, grid[0].length];
     // Up, Down, Left, Right
-    const neiEnums = [{y: 1, x: 0}, {y: -1, x: 0}, {y: 0, x: -1}, {y: 0, x: 1}];
+    let neiEnums = [{y: 1, x: 0}, {y: -1, x: 0}, {y: 0, x: -1}, {y: 0, x: 1}];
     let stack = new Stack();
     let visited = new Set();
     let path = {}
     path[[start.y, start.x]] = null;
 
-    stack.push([start.y, start.x]);
+    stack.push(start);
 
     // Perform DFS here
     while (!stack.isEmpty()) {
 
-        let curPos = stack.pop();
-        let [curY, curX] = curPos;
+        let curNode = stack.pop();
+        let [curY, curX] = [curNode.y, curNode.x];
+        let node = JSON.stringify(grid[curY][curX]);
 
-        if (curY === end.y && curX === end.x) {
-            // If we reach the end node here we would backtrack and find the path back to the start node
-            break;
-        }
-
-        if (visited.has([curY, curX])) {
-            continue;
-        }
-
+        console.log('curY:', curY, 'curX:', curX);
 
         if (animate) {
             let cell = document.getElementById(`${curY}-${curX}`);
@@ -45,18 +38,37 @@ async function DFS(grid, start, end, animate=true) {
             cell.classList.add('animate', 'pop');
         }
 
-        visited.add([curY, curX]);
+        if (curY === end.y && curX === end.x) {
+            // If we reach the end node here we would backtrack and find the path back to the start node
+            break;
+        }
+
+        if (visited.has(node)) {
+            continue;
+        }
+
+        visited.add(node);
 
         neiEnums.forEach(
             (deltas, _index) => {
                 let [newY, newX] = [curY + deltas.y, curX + deltas.x];
-                if (!visited.has([newY, newX]) && 0 <= newY && newY < ROWS && 0 <= newX && newX < COLS) {
-                    console.log('Appending new coordinates: ', [newY, newX]);
-                    stack.push([newY, newX]);
-                    visited.add([newY, newX])
+                if (0 <= newY && newY < ROWS &&
+                    0 <= newX && newX < COLS &&
+                    !visited.has(JSON.stringify(grid[newY][newX]))) {
+
+                        if (!grid[newY][newX].isWall) {
+
+                            console.log('Appending new coordinates: ', grid[newY][newX]);
+                            stack.push(grid[newY][newX]);
+
+                        }
+
                 }
             }
         );
+
+        await sleep(5);
+
     }
 
     // if (reachable) {

@@ -2,7 +2,7 @@ import Queue from "./Queue.js";
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
- }
+}
 
 async function BFS(grid, start, end, animate=true) {
 
