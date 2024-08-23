@@ -60,6 +60,7 @@ async function DFS(grid, start, end, animate=true) {
 
                             console.log('Appending new coordinates: ', grid[newY][newX]);
                             stack.push(grid[newY][newX]);
+                            path[[newY, newX]] = [curY, curX];
 
                         }
 
