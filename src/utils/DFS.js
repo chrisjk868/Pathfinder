@@ -14,11 +14,11 @@ async function DFS(grid, start, end, animate=true) {
         return;
     }
     const [ROWS, COLS] = [grid.length, grid[0].length];
-    // Up, Down, Left, Right
-    let neiEnums = [{y: 1, x: 0}, {y: -1, x: 0}, {y: 0, x: -1}, {y: 0, x: 1}];
+    // Left, Right, Up, Down
+    let neiEnums = [{y: 1, x: 0}, {y: 0, x: -1}, {y: -1, x: 0}, {y: 0, x: 1}];
     let stack = new Stack();
     let visited = new Set();
-    let path = {}
+    let path = {};
     path[[start.y, start.x]] = null;
 
     stack.push(start);
@@ -40,6 +40,13 @@ async function DFS(grid, start, end, animate=true) {
 
         if (curY === end.y && curX === end.x) {
             // If we reach the end node here we would backtrack and find the path back to the start node
+            let cur = [curY, curX];
+            while (cur) {
+                let next = path[[curY, curX]];
+                cur = next;
+                // Animate path backtracking here
+
+            }
             break;
         }
 
