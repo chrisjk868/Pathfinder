@@ -42,9 +42,14 @@ async function DFS(grid, start, end, animate=true) {
             // If we reach the end node here we would backtrack and find the path back to the start node
             let cur = [curY, curX];
             while (cur) {
+                // Animate path backtracking here
+                if (animate) {
+                    let cell = document.getElementById(`${curr[0]}-${curr[1]}`);
+                    cell.style.backgroundColor = 'yellow';
+                    cell.classList.add('animate1', 'pop1');
+                }
                 let next = path[[curY, curX]];
                 cur = next;
-                // Animate path backtracking here
 
             }
             break;
