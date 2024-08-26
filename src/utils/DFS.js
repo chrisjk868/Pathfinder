@@ -20,7 +20,7 @@ async function DFS(grid, start, end, animate=true) {
     let visited = new Set();
     let path = {};
     path[[start.y, start.x]] = null;
-
+    
     stack.push(start);
 
     // Perform DFS here
@@ -40,17 +40,19 @@ async function DFS(grid, start, end, animate=true) {
 
         if (curY === end.y && curX === end.x) {
             // If we reach the end node here we would backtrack and find the path back to the start node
+            console.log('Backtracking ...');
+            console.log(path);
             let cur = [curY, curX];
-            while (cur) {
+            while (cur !== null) {
                 // Animate path backtracking here
                 if (animate) {
-                    let cell = document.getElementById(`${curr[0]}-${curr[1]}`);
+                    let cell = document.getElementById(`${cur[0]}-${cur[1]}`);
                     cell.style.backgroundColor = 'yellow';
                     cell.classList.add('animate1', 'pop1');
                 }
-                let next = path[[curY, curX]];
-                cur = next;
-
+                console.log(cur);
+                cur = path[cur];
+                await sleep(25);
             }
             break;
         }
